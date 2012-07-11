@@ -1,0 +1,72 @@
+{
+  "dependencies": {
+  },
+  "name": "inmobi_cloud",
+  "maintainer_email": "anirban.saha@inmobi.com",
+  "attributes": {
+    "inmobi_cloud/availability_zone": {
+      "required": "required",
+      "calculated": false,
+      "choice": [
+
+      ],
+      "type": "string",
+      "recipes": [
+        "inmobi_cloud::base_os_config"
+      ],
+      "description": "The ec2 availability zone of the instance to be launched, has to be set to the ENV variable EC2_AVAILABILITY_ZONE from RS dashboard inputs",
+      "display_name": "Availability zone of the instance"
+    },
+    "inmobi_cloud/ec2_private_ip": {
+      "required": "required",
+      "calculated": false,
+      "choice": [
+
+      ],
+      "type": "string",
+      "recipes": [
+        "inmobi_cloud::base_os_config"
+      ],
+      "description": "The private IP of the instance to be launched, has to be set to the ENV variable PRIVATE_IP from RS dashboard inputs",
+      "display_name": "IP of the instance"
+    },
+    "inmobi_cloud/rs_hostname": {
+      "required": "required",
+      "calculated": false,
+      "choice": [
+
+      ],
+      "type": "string",
+      "recipes": [
+        "inmobi_cloud::base_os_config",
+        "inmobi_cloud::apt_repo_config"
+      ],
+      "description": "The FQDN of the instance to be launched, has to be set to the ENV variable RS_SERVER_NAME from RS dashboard inputs",
+      "display_name": "Nickname of the instance"
+    }
+  },
+  "license": "Apache 2.0",
+  "suggestions": {
+  },
+  "platforms": {
+  },
+  "maintainer": "Anirban Saha",
+  "long_description": "",
+  "version": "0.1.0",
+  "recommendations": {
+  },
+  "recipes": {
+    "inmobi_cloud::base_os_config": "Configures basic OS files",
+    "inmobi_cloud::apt_repo_config": "Configures apt repo files",
+    "inmobi_cloud::puppet_config": "Configures puppet and related services"
+  },
+  "groupings": {
+  },
+  "conflicting": {
+  },
+  "replacing": {
+  },
+  "description": "Installs/Configures inmobi_cloud",
+  "providing": {
+  }
+}
