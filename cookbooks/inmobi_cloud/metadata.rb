@@ -14,3 +14,9 @@ attribute "inmobi_cloud/rs_hostname",
  :description => "The FQDN of the instance to be launched",
  :required => "required",
  :recipes => [ "inmobi_cloud::base_os_config", "inmobi_cloud::apt_repo_config" ]
+
+attribute "inmobi_cloud/ec2_private_ip",
+ :display_name => "IP of the instance",
+ :description => "The private IP of the instance to be launched",
+ :required => "required",
+ :recipes => [ "inmobi_cloud::base_os_config" ]
