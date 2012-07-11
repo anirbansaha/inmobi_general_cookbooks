@@ -15,3 +15,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+if platform?('ubuntu', 'debian')
+  bash "install_puppet_services" do
+    code <<-EOH
+      /usr/bin/apt-get -y --force-yes install puppet > /dev/null 2>&1
+      /usr/bin/apt-get -y --force-yes install service-puppet > /dev/null 2>&1
+    EOH
+  end
+end

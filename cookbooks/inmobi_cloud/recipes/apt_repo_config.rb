@@ -33,3 +33,17 @@ if platform?('ubuntu', 'debian')
     )
   end
 end
+
+if platform?('ubuntu', 'debian')
+    bash "repo_update" do
+      code <<-EOH
+        /usr/bin/apt-get -y update > /dev/null 2>&1
+      EOH
+    end
+else
+    bash "repo_update" do
+      code <<-EOH
+        /usr/bin/yum -y update > /dev/null 2>&1
+      EOH
+    end
+end
