@@ -17,4 +17,5 @@
 # limitations under the License.
 #
 
-
+default[:inmobi_cloud][:rs_hostname] = nil
+default[:inmobi_cloud][:ec2_private_ip] = nil
