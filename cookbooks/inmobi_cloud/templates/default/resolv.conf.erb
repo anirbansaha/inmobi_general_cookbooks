@@ -1,0 +1,14 @@
+# 
+# Cookbook Name:: inmobi_cloud
+#
+# Copyright InMobi, Inc. All rights reserved.
+# 
+# Managed by InMobi - SA Team
+# DO NOT EDIT MANUALLY
+#
+
+domain <%= @domain %>
+search <%= @ops_zone %> <%= @zone %> <%= @domain %>
+nameserver <%= @gateway_ip %>
+nameserver <%= @admbox_ip %>
+nameserver <%= @google_ip %>

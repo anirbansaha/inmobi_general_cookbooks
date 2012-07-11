@@ -1,6 +1,5 @@
-#
 # Cookbook Name:: inmobi_cloud
-# Recipe:: default
+# Recipe:: apt_repo_config 
 #
 # Copyright 2012, InMobi Inc.
 #
