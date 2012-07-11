@@ -20,3 +20,4 @@
 default[:inmobi_cloud][:rs_hostname] = nil
 default[:inmobi_cloud][:ec2_private_ip] = nil
 default[:inmobi_cloud][:availability_zone] = nil
+default[:inmobi_cloud][:apache_port] = "9999"

@@ -15,3 +15,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+hostname_fqdn = "#{node.inmobi_cloud.rs_hostname}".downcase
+host_array = hostname_fqdn.split('.')
+zone = host_array[-3..-1].join('.')
+apache_port = "#{node.inmobi_cloud.apache_port}"
+pkg_host_url = "pkg." + "#{zone}" + ":#{node.inmobi_cloud.apache_port}"
+
+log 'Setting repo files.'
+if platform?('ubuntu', 'debian')
+  template "/etc/apt/sources.list" do
+    source "sources.list.erb"
+    owner "root"
+    group "root"
+    mode "0644"
+    variables(
+      :pkg_host_url => pkg_host_url
+    )
+  end
+end

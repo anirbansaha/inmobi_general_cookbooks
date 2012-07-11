@@ -1,0 +1,15 @@
+# 
+# Cookbook Name:: inmobi_cloud
+#
+# Copyright InMobi, Inc. All rights reserved.
+# 
+# Managed by InMobi - SA Team
+# DO NOT EDIT MANUALLY
+#
+deb http://<%= @pkg_host_url %>/mirror/archive.ubuntu.com/ubuntu/ lucid main restricted universe multiverse
+deb http://<%= @pkg_host_url %>/mirror/archive.ubuntu.com//ubuntu/ lucid-updates  main restricted universe multiverse
+deb http://<%= @pkg_host_url %>/mirror/archive.ubuntu.com/ubuntu/ lucid-security main restricted universe multiverse
+deb http://<%= @pkg_host_url %>/mirror/archive.cloudera.com/debian/ lucid-cdh3u0 contrib
+deb http://pkg.ua2.inmobi.com/deb/inmobi/ prod main 3pp 3ppours ops
+deb http://<%= @pkg_host_url %>/apt/inmobi/ testing main
+deb http://<%= @pkg_host_url %>/mirror/archive.canonical.com/ubuntu/ lucid partner
