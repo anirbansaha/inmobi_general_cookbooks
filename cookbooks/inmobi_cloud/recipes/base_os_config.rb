@@ -72,14 +72,12 @@ end
 log 'Setting hostname.'
 if platform?('centos', 'redhat')
   bash "set_hostname" do
-    flags "-ex"
     code <<-EOH
       hostname #{hostname_fqdn}
     EOH
   end
 else
   bash "set_hostname" do
-    flags "-ex"
     code <<-EOH
       start hostname
     EOH
