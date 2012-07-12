@@ -39,6 +39,7 @@ zone = host_array[-3..-1].join('.')
 udns_user = node[:inmobi_cloud][:dns_username]
 udns_passwd = node[:inmobi_cloud][:dns_password]
 log "#{udns_user} #{udns_passwd}"
+result = `/usr/bin/ruby /opt/rightscale/dns/ultradns_add_record.rb -i #{zone}:#{hostname_fqdn}  -u "#{node[:inmobi_cloud][:dns_username]}" -p "#{node[:inmobi_cloud][:dns_password]}" -a #{local_ip}`
 
 bash "set_DNS" do
     code <<-EOH
