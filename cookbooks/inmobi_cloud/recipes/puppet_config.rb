@@ -15,6 +15,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+puppet_ssl_dir = "/var/lib/puppet/ssl"
+
+#Check if puppet already running
+if `ps aux | grep service-puppe[t]` != ""
+    if File.exist?(puppet_ssl_dir)
+         system "/bin/rm -r #{puppet_ssl_dir}"
+         exit(0)
+    else
+         exit(0)
+    end
+end
+
 if platform?('ubuntu', 'debian')
   bash "install_puppet_services" do
     code <<-EOH
