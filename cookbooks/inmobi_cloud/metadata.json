@@ -13,7 +13,8 @@
       "type": "string",
       "recipes": [
         "inmobi_cloud::dns_add_record",
-        "inmobi_cloud::dns_delete_record"
+        "inmobi_cloud::dns_delete_record",
+        "inmobi_cloud::hostname_change_config"
       ],
       "description": "The username required to make UltraDNS API call, has to be set to the CREDENTIAL variable UDNS_USER from RS dashboard inputs",
       "display_name": "UltraDNS username"
@@ -27,7 +28,8 @@
       "type": "string",
       "recipes": [
         "inmobi_cloud::dns_add_record",
-        "inmobi_cloud::dns_delete_record"
+        "inmobi_cloud::dns_delete_record",
+        "inmobi_cloud::hostname_change_config"
       ],
       "description": "The password required to make UltraDNS API call, has to be set to the CREDENTIAL variable UDNS_PASSWD from RS dashboard inputs",
       "display_name": "UltraDNS password"
@@ -40,7 +42,8 @@
       ],
       "type": "string",
       "recipes": [
-        "inmobi_cloud::base_os_config"
+        "inmobi_cloud::base_os_config",
+        "inmobi_cloud::hostname_change_config"
       ],
       "description": "The ec2 availability zone of the instance to be launched, has to be set to the ENV variable EC2_AVAILABILITY_ZONE from RS dashboard inputs",
       "display_name": "Availability zone of the instance"
@@ -55,7 +58,8 @@
       "recipes": [
         "inmobi_cloud::base_os_config",
         "inmobi_cloud::dns_add_record",
-        "inmobi_cloud::dns_delete_record"
+        "inmobi_cloud::dns_delete_record",
+        "inmobi_cloud::hostname_change_config"
       ],
       "description": "The private IP of the instance to be launched, has to be set to the ENV variable PRIVATE_IP from RS dashboard inputs",
       "display_name": "IP of the instance"
@@ -71,7 +75,8 @@
         "inmobi_cloud::base_os_config",
         "inmobi_cloud::apt_repo_config",
         "inmobi_cloud::dns_add_record",
-        "inmobi_cloud::dns_delete_record"
+        "inmobi_cloud::dns_delete_record",
+        "inmobi_cloud::hostname_change_config"
       ],
       "description": "The FQDN of the instance to be launched, has to be set to the ENV variable RS_SERVER_NAME from RS dashboard inputs",
       "display_name": "Nickname of the instance"
@@ -91,6 +96,7 @@
     "inmobi_cloud::base_os_config": "Configures basic OS files",
     "inmobi_cloud::dns_delete_record": "Removes DNS entry for UltraDNS",
     "inmobi_cloud::apt_repo_config": "Configures apt repo files",
+    "inmobi_cloud::hostname_change_config": "Reconfigures instance on hostname change, has to be run after changing the nickname of the instance",
     "inmobi_cloud::dns_add_record": "Adds DNS entry in UltraDNS",
     "inmobi_cloud::puppet_config": "Configures puppet and related services"
   },
