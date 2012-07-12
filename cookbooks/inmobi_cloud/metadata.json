@@ -94,7 +94,6 @@
   },
   "recipes": {
     "inmobi_cloud::base_os_config": "Configures basic OS files",
-    "inmobi_cloud::test": "Removes DNS entry for UltraDNS",
     "inmobi_cloud::dns_delete_record": "Removes DNS entry for UltraDNS",
     "inmobi_cloud::apt_repo_config": "Configures apt repo files",
     "inmobi_cloud::hostname_change_config": "Reconfigures instance on hostname change, has to be run after changing the nickname of the instance",

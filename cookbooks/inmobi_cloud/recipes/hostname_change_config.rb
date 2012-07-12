@@ -16,7 +16,7 @@
 # limitations under the License.
 #
 
-old_hostname = `cat /etc/hostname`
+old_hostname = `cat /etc/hostname`.chomp
 local_ip = "#{node.inmobi_cloud.ec2_private_ip}"
 hostname_fqdn = "#{node.inmobi_cloud.rs_hostname}".downcase
 cloud_colo = {"us-east" => "ev1.inmobi.com", "eu-west" => "ir1.inmobi.com", "us-west" => "wc1.inmobi.com", "ap-southeast" => "sg1.inmobi.com"}

@@ -11,7 +11,6 @@ recipe "inmobi_cloud::puppet_config", "Configures puppet and related services"
 recipe "inmobi_cloud::dns_add_record", "Adds DNS entry in UltraDNS"
 recipe "inmobi_cloud::dns_delete_record", "Removes DNS entry for UltraDNS"
 recipe "inmobi_cloud::hostname_change_config", "Reconfigures instance on hostname change, has to be run after changing the nickname of the instance"
-recipe "inmobi_cloud::test", "Removes DNS entry for UltraDNS"
 
 attribute "inmobi_cloud/rs_hostname",
  :display_name => "Nickname of the instance",
