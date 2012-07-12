@@ -15,13 +15,13 @@ attribute "inmobi_cloud/rs_hostname",
  :display_name => "Nickname of the instance",
  :description => "The FQDN of the instance to be launched, has to be set to the ENV variable RS_SERVER_NAME from RS dashboard inputs",
  :required => "required",
- :recipes => [ "inmobi_cloud::base_os_config", "inmobi_cloud::apt_repo_config" ]
+ :recipes => [ "inmobi_cloud::base_os_config", "inmobi_cloud::apt_repo_config", "inmobi_cloud::dns_add_record", "inmobi_cloud::dns_delete_record" ]
 
 attribute "inmobi_cloud/ec2_private_ip",
  :display_name => "IP of the instance",
  :description => "The private IP of the instance to be launched, has to be set to the ENV variable PRIVATE_IP from RS dashboard inputs",
  :required => "required",
- :recipes => [ "inmobi_cloud::base_os_config" ]
+ :recipes => [ "inmobi_cloud::base_os_config", "inmobi_cloud::dns_add_record", "inmobi_cloud::dns_delete_record" ]
 
 attribute "inmobi_cloud/availability_zone",
  :display_name => "Availability zone of the instance",
