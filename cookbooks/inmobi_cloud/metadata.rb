@@ -8,6 +8,8 @@ version          "0.1"
 recipe "inmobi_cloud::base_os_config", "Configures basic OS files"
 recipe "inmobi_cloud::apt_repo_config", "Configures apt repo files"
 recipe "inmobi_cloud::puppet_config", "Configures puppet and related services"
+recipe "inmobi_cloud::dns_add_record", "Adds DNS entry in UltraDNS"
+recipe "inmobi_cloud::dns_delete_record", "Removes DNS entry for UltraDNS"
 
 attribute "inmobi_cloud/rs_hostname",
  :display_name => "Nickname of the instance",
