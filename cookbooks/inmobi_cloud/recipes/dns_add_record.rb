@@ -42,6 +42,6 @@ puts "#{udns_user} #{udns_passwd}"
 
 bash "set_DNS" do
     code <<-EOH
-      /usr/bin/ruby /opt/rightscale/dns/ultradns_add_record.rb -i #{zone}:#{hostname_fqdn}  -u #{udns_user} -p #{udns_passwd} -a #{local_ip}
+      /usr/bin/ruby /opt/rightscale/dns/ultradns_add_record.rb -i #{zone}:#{hostname_fqdn}  -u #{node[:inmobi_cloud][:dns_username]} -p #{node[:inmobi_cloud][:dns_password]} -a #{local_ip}
     EOH
 end
