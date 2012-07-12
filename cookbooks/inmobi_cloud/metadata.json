@@ -4,6 +4,34 @@
   "name": "inmobi_cloud",
   "maintainer_email": "anirban.saha@inmobi.com",
   "attributes": {
+    "inmobi_cloud/dns_username": {
+      "required": "required",
+      "calculated": false,
+      "choice": [
+
+      ],
+      "type": "string",
+      "recipes": [
+        "inmobi_cloud::dns_add_record",
+        "inmobi_cloud::dns_delete_record"
+      ],
+      "description": "The username required to make UltraDNS API call, has to be set to the CREDENTIAL variable UDNS_USER from RS dashboard inputs",
+      "display_name": "UltraDNS username"
+    },
+    "inmobi_cloud/dns_password": {
+      "required": "required",
+      "calculated": false,
+      "choice": [
+
+      ],
+      "type": "string",
+      "recipes": [
+        "inmobi_cloud::dns_add_record",
+        "inmobi_cloud::dns_delete_record"
+      ],
+      "description": "The password required to make UltraDNS API call, has to be set to the CREDENTIAL variable UDNS_PASSWD from RS dashboard inputs",
+      "display_name": "UltraDNS password"
+    },
     "inmobi_cloud/availability_zone": {
       "required": "required",
       "calculated": false,

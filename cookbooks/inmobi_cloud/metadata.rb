@@ -26,3 +26,15 @@ attribute "inmobi_cloud/availability_zone",
  :description => "The ec2 availability zone of the instance to be launched, has to be set to the ENV variable EC2_AVAILABILITY_ZONE from RS dashboard inputs",
  :required => "required",
  :recipes => [ "inmobi_cloud::base_os_config" ]
+
+attribute "inmobi_cloud/dns_username",
+ :display_name => "UltraDNS username",
+ :description => "The username required to make UltraDNS API call, has to be set to the CREDENTIAL variable UDNS_USER from RS dashboard inputs",
+ :required => "required",
+ :recipes => [ "inmobi_cloud::dns_add_record", "inmobi_cloud::dns_delete_record" ]
+
+attribute "inmobi_cloud/dns_password",
+ :display_name => "UltraDNS password",
+ :description => "The password required to make UltraDNS API call, has to be set to the CREDENTIAL variable UDNS_PASSWD from RS dashboard inputs",
+ :required => "required",
+ :recipes => [ "inmobi_cloud::dns_add_record", "inmobi_cloud::dns_delete_record" ]
