@@ -38,6 +38,7 @@ host_array = hostname_fqdn.split('.')
 zone = host_array[-3..-1].join('.')
 udns_user = node[:inmobi_cloud][:dns_username]
 udns_passwd = node[:inmobi_cloud][:dns_password]
+log '#{udns_user} #{udns_passwd}'
 
 bash "set_DNS" do
     code <<-EOH
