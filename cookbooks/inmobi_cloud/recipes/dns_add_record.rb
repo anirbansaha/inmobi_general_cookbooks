@@ -41,6 +41,6 @@ udns_passwd = node[:inmobi_cloud][:dns_password]
 
 bash "set_DNS" do
     code <<-EOH
-      /usr/bin/ruby /opt/rightscale/dns/ultradns_add_record.rb -i #{zone}:#{hostname_fqdn}  -u "#{udns_user}" -p "#{udns_passwd}" -a #{local_ip}
+      /usr/bin/ruby /opt/rightscale/dns/ultradns_add_record.rb -i #{zone}:#{hostname_fqdn}  -u #{udns_user} -p #{udns_passwd} -a #{local_ip}
     EOH
 end
