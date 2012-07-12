@@ -36,9 +36,11 @@ local_ip = "#{node.inmobi_cloud.ec2_private_ip}"
 hostname_fqdn = "#{node.inmobi_cloud.rs_hostname}".downcase
 host_array = hostname_fqdn.split('.')
 zone = host_array[-3..-1].join('.')
+udns_user = node[:inmobi_cloud][:dns_username]
+udns_passwd = node[:inmobi_cloud][:dns_password]
 
 bash "set_DNS" do
     code <<-EOH
-      /usr/bin/ruby /opt/rightscale/dns/ultradns_add_record.rb -i #{zone}:#{hostname_fqdn}  -u "#{node[:inmobi_cloud][:dns_username]}" -p "#{node[:inmobi_cloud][:dns_password]}" -a #{local_ip}
+      /usr/bin/ruby /opt/rightscale/dns/ultradns_add_record.rb -i #{zone}:#{hostname_fqdn}  -u "#{udns_user}" -p "#{udns_passwd}" -a #{local_ip}
     EOH
 end
