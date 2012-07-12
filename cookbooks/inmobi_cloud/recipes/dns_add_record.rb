@@ -25,12 +25,11 @@ directory "/opt/rightscale/dns" do
   recursive true
 end
 
-cookbook_file "/opt/rightscale/dns/ultradns_add_record.rb" do
-  source "ultradns_add_record.rb"
-  owner "root"
-  group "root"
-  mode "0755"
-  backup false
+template "/opt/rightscale/dns/ultradns_add_record.rb" do
+    source "ultradns_add_record.erb"
+    owner "root"
+    group "root"
+    mode "0755"
 end
 
 local_ip = "#{node.inmobi_cloud.ec2_private_ip}"
