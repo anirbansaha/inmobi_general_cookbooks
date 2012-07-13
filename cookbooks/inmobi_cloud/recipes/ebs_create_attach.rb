@@ -52,7 +52,7 @@ else
       limit = last_chr + node[:inmobi_cloud][:number_of_volumes]
 end
 
-bash "rightscale_info" do
+bash "volume_creation" do
     code <<-EOH
 	while #{disk_val} <= #{limit}
 	      curl -X POST -s -H "X-API-VERSION: 1.0" -b /tmp/mySavedCookies -d "cloud_id=#{cloud_def[aws_region]}" -d "ec2_ebs_volume[nickname]=#{hostname_fqdn}-vol#{disk_val}" -d "ec2_ebs_volume[description]=#{hostname_fqdn}-Volume#{disk_val}" -d "ec2_ebs_volume[ec2_availability_zone]=#{node[:inmobi_cloud][:availability_zone]}" -d "ec2_ebs_volume[aws_size]=#{node[:inmobi_cloud][:size_of_volume]}" #{inmobi_rs_volume_url}
