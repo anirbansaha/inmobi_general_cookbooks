@@ -40,7 +40,8 @@ end
 vol_verify = `cat /tmp/vol_verify`.chomp
 if vol_verify != "0"
       present_vol = `cat /tmp/vol_lastvol`.chomp
-      last_chr = present_vol[-1,1]
+      last_chr_str = present_vol[-1,1]
+      last_chr = last_chr_str.to_i
 end
 
 if vol_verify == "0"
@@ -48,5 +49,14 @@ if vol_verify == "0"
       limit = node[:inmobi_cloud][:number_of_volumes]
 else
       disk_val = last_chr + 1
-      limit = last_chr + ENV['VOL_QTY']
+      limit = last_chr + node[:inmobi_cloud][:number_of_volumes]
+end
+
+bash "rightscale_info" do
+    code <<-EOH
+	while #{disk_val} <= #{limit}
+	      curl -X POST -s -H "X-API-VERSION: 1.0" -b /tmp/mySavedCookies -d "cloud_id=#{cloud_def[aws_region]}" -d "ec2_ebs_volume[nickname]=#{hostname_fqdn}-vol#{disk_val}" -d "ec2_ebs_volume[description]=#{hostname_fqdn}-Volume#{disk_val}" -d "ec2_ebs_volume[ec2_availability_zone]=#{node[:inmobi_cloud][:availability_zone]}" -d "ec2_ebs_volume[aws_size]=#{node[:inmobi_cloud][:size_of_volume]}" #{inmobi_rs_volume_url}
+       	      #{disk_val} += 1
+	end
+    EOH
 end
