@@ -19,6 +19,32 @@
       "description": "The username required to make UltraDNS API call, has to be set to the CREDENTIAL variable UDNS_USER from RS dashboard inputs",
       "display_name": "UltraDNS username"
     },
+    "inmobi_cloud/rscale_password": {
+      "required": "required",
+      "calculated": false,
+      "choice": [
+
+      ],
+      "type": "string",
+      "recipes": [
+        "inmobi_cloud::ebs_create_attach"
+      ],
+      "description": "The password required to make RightScale API call, has to be set to the CREDENTIAL variable RSCALE_PASSWD from RS dashboard inputs",
+      "display_name": "RightScale password"
+    },
+    "inmobi_cloud/size_of_volume": {
+      "required": "required",
+      "calculated": false,
+      "choice": [
+
+      ],
+      "type": "string",
+      "recipes": [
+        "inmobi_cloud::ebs_create_attach"
+      ],
+      "description": "Size of EBS volumes required to be created and attached to the instance",
+      "display_name": "Size of EBS volumes required"
+    },
     "inmobi_cloud/dns_password": {
       "required": "required",
       "calculated": false,
@@ -64,6 +90,32 @@
       "description": "The private IP of the instance to be launched, has to be set to the ENV variable PRIVATE_IP from RS dashboard inputs",
       "display_name": "IP of the instance"
     },
+    "inmobi_cloud/rscale_username": {
+      "required": "required",
+      "calculated": false,
+      "choice": [
+
+      ],
+      "type": "string",
+      "recipes": [
+        "inmobi_cloud::ebs_create_attach"
+      ],
+      "description": "The username required to make RightScale API call, has to be set to the CREDENTIAL variable RSCALE_USER from RS dashboard inputs",
+      "display_name": "RightScale username"
+    },
+    "inmobi_cloud/number_of_volumes": {
+      "required": "required",
+      "calculated": false,
+      "choice": [
+
+      ],
+      "type": "string",
+      "recipes": [
+        "inmobi_cloud::ebs_create_attach"
+      ],
+      "description": "Number of EBS volumes required to be created and attached to the instance",
+      "display_name": "Number of EBS volumes required"
+    },
     "inmobi_cloud/rs_hostname": {
       "required": "required",
       "calculated": false,
@@ -96,6 +148,7 @@
     "inmobi_cloud::base_os_config": "Configures basic OS files",
     "inmobi_cloud::dns_delete_record": "Removes DNS entry for UltraDNS",
     "inmobi_cloud::apt_repo_config": "Configures apt repo files",
+    "inmobi_cloud::ebs_create_attach": "Creates ebs volumes and attaches to the instance based on the inputs entered, i.e. number of volumes required and size of each volume",
     "inmobi_cloud::hostname_change_config": "Reconfigures instance on hostname change, has to be run after changing the nickname of the instance",
     "inmobi_cloud::dns_add_record": "Adds DNS entry in UltraDNS",
     "inmobi_cloud::puppet_config": "Configures puppet and related services"
