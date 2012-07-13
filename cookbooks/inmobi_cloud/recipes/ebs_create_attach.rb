@@ -54,9 +54,9 @@ end
 
 bash "volume_creation" do
     code <<-EOH
-	while #{disk_val} <= #{limit}
-	      curl -X POST -s -H "X-API-VERSION: 1.0" -b /tmp/mySavedCookies -d "cloud_id=#{cloud_def[aws_region]}" -d "ec2_ebs_volume[nickname]=#{hostname_fqdn}-vol#{disk_val}" -d "ec2_ebs_volume[description]=#{hostname_fqdn}-Volume#{disk_val}" -d "ec2_ebs_volume[ec2_availability_zone]=#{node[:inmobi_cloud][:availability_zone]}" -d "ec2_ebs_volume[aws_size]=#{node[:inmobi_cloud][:size_of_volume]}" #{inmobi_rs_volume_url}
-       	      #{disk_val} += 1
-	end
+	for (( num=#{disk_val}; num<=#{limit}; num++ ))
+	do
+	      /usr/bin/curl -X POST -s -H "X-API-VERSION: 1.0" -b /tmp/mySavedCookies -d "cloud_id=#{cloud_def[aws_region]}" -d "ec2_ebs_volume[nickname]=#{hostname_fqdn}-vol$num" -d "ec2_ebs_volume[description]=#{hostname_fqdn}-Volume$num" -d "ec2_ebs_volume[ec2_availability_zone]=#{node[:inmobi_cloud][:availability_zone]}" -d "ec2_ebs_volume[aws_size]=#{node[:inmobi_cloud][:size_of_volume]}" #{inmobi_rs_volume_url}
+	done
     EOH
 end
