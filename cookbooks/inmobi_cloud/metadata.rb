@@ -29,7 +29,7 @@ attribute "inmobi_cloud/availability_zone",
  :display_name => "Availability zone of the instance",
  :description => "The ec2 availability zone of the instance to be launched, has to be set to the ENV variable EC2_AVAILABILITY_ZONE from RS dashboard inputs",
  :required => "required",
- :recipes => [ "inmobi_cloud::base_os_config", "inmobi_cloud::hostname_change_config" ]
+ :recipes => [ "inmobi_cloud::base_os_config", "inmobi_cloud::hostname_change_config", "inmobi_cloud::ebs_create_attach" ]
 
 attribute "inmobi_cloud/dns_username",
  :display_name => "UltraDNS username",
