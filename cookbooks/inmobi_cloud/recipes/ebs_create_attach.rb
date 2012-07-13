@@ -49,7 +49,7 @@ if vol_verify == "0"
       limit = node[:inmobi_cloud][:number_of_volumes]
 else
       disk_val = last_chr + 1
-      limit = last_chr + node[:inmobi_cloud][:number_of_volumes]
+      limit = last_chr + node[:inmobi_cloud][:number_of_volumes].to_i
 end
 
 bash "volume_creation" do
