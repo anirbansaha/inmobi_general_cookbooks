@@ -36,3 +36,17 @@ bash "rightscale_info" do
       /usr/bin/curl -X GET -s -H "X-API-VERSION: 1.0" -b /tmp/mySavedCookies -d "cloud_id=#{cloud_def[aws_region]}" #{inmobi_rs_volume_url} | grep "#{hostname_fqdn}"-vol | tail -n 1 | cut -d'>' -f2 | cut -d'<' -f1 > /tmp/vol_lastvol
     EOH
 end
+
+vol_verify = `cat /tmp/vol_verify`.chomp
+if vol_verify != "0"
+      present_vol = `cat /tmp/vol_lastvol`.chomp
+      last_chr = present_vol[-1,1]
+end
+
+if vol_verify == "0"
+      disk_val = 1
+      limit = node[:inmobi_cloud][:number_of_volumes]
+else
+      disk_val = last_chr + 1
+      limit = last_chr + ENV['VOL_QTY']
+end

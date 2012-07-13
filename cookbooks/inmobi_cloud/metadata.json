@@ -42,7 +42,7 @@
       "recipes": [
         "inmobi_cloud::ebs_create_attach"
       ],
-      "description": "Size of EBS volumes required to be created and attached to the instance",
+      "description": "Size of EBS volumes required to be created and attached to the instance, has to be given a value of type TEXT, e.g. 50 if 50G volumes are to be attached",
       "display_name": "Size of EBS volumes required"
     },
     "inmobi_cloud/dns_password": {
@@ -114,7 +114,7 @@
       "recipes": [
         "inmobi_cloud::ebs_create_attach"
       ],
-      "description": "Number of EBS volumes required to be created and attached to the instance",
+      "description": "Number of EBS volumes required to be created and attached to the instance, has to be given a value of type TEXT, e.g. 4 if four EBS volumes are to be attached",
       "display_name": "Number of EBS volumes required"
     },
     "inmobi_cloud/rs_hostname": {

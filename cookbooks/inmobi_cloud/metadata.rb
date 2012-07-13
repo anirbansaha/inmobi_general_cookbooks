@@ -57,12 +57,12 @@ attribute "inmobi_cloud/rscale_password",
 
 attribute "inmobi_cloud/number_of_volumes",
  :display_name => "Number of EBS volumes required",
- :description => "Number of EBS volumes required to be created and attached to the instance",
+ :description => "Number of EBS volumes required to be created and attached to the instance, has to be given a value of type TEXT, e.g. 4 if four EBS volumes are to be attached",
  :required => "required",
  :recipes => [ "inmobi_cloud::ebs_create_attach" ]
 
 attribute "inmobi_cloud/size_of_volume",
  :display_name => "Size of EBS volumes required",
- :description => "Size of EBS volumes required to be created and attached to the instance",
+ :description => "Size of EBS volumes required to be created and attached to the instance, has to be given a value of type TEXT, e.g. 50 if 50G volumes are to be attached",
  :required => "required",
  :recipes => [ "inmobi_cloud::ebs_create_attach" ]
