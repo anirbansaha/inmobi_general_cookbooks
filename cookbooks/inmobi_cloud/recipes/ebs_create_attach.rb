@@ -73,8 +73,9 @@ end
 
 sleep 200
 f = File.open("/tmp/server_url")
-this_server_url = f.read
+this_server_url_raw = f.read
 f.close
+this_server_url = this_server_url_raw.chomp
 this_server_volume_url = "#{this_server_url}" + "/attach_volume"
 log "#{this_server_url}"
 log "#{this_server_volume_url}"
