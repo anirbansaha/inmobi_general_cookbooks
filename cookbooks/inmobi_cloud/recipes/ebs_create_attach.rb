@@ -72,8 +72,9 @@ bash "volume_creation" do
 end
 
 sleep 200
-
-this_server_url = `cat /tmp/server_url`.chomp
+f = File.open("/tmp/server_url")
+this_server_url = f.read
+f.close
 this_server_volume_url = "#{this_server_url}" + "/attach_volume"
 log "#{this_server_url}"
 log "#{this_server_volume_url}"
