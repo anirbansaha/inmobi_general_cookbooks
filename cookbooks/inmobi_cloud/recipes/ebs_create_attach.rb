@@ -75,6 +75,8 @@ sleep 200
 
 this_server_url = `cat /tmp/server_url`.chomp
 this_server_volume_url = "#{this_server_url}" + "/attach_volume"
+log "#{this_server_url}"
+log "#{this_server_volume_url}"
 
 bash "get_volume_list" do
     code <<-EOH
@@ -92,6 +94,7 @@ else
     new_device_chr = new_device_val.chr 
     first_device = "sd" + "#{new_device_chr}"
 end
+log "#{first_device}"
 device_val = first_device[-1]
 device_limit = device_val + node[:inmobi_cloud][:number_of_volumes].to_i
 
@@ -109,7 +112,6 @@ bash "volume_attachment" do
               		break
           	done
 	    done
-	/bin/rm -f /tmp/vol* /tmp/server* /tmp/disk /tmp/my*
     EOH
 end
 sleep 240
