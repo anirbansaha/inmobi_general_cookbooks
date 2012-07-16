@@ -43,6 +43,9 @@ bash "rightscale_info" do
     EOH
 end
 
+last_chr = 0
+disk_val = 0
+limit = 0
 vol_verify_out = `cat /tmp/vol_verify`.chomp
 vol_verify = vol_verify_out.to_s
 if vol_verify != "0"
@@ -68,7 +71,7 @@ bash "volume_creation" do
     EOH
 end
 
-sleep 120
+sleep 200
 
 this_server_url = `cat /tmp/server_url`.chomp
 this_server_volume_url = "#{this_server_url}" + "/attach_volume"
@@ -79,14 +82,15 @@ bash "get_volume_list" do
     EOH
 end
 
-disk_verify = `cat /tmp/disk`.chomp
-if disk_verify != ""
-    disk_verify_val = disk_verify[-1]
+first_device = ""
+last_device = `cat /tmp/disk`.chomp
+if last_device == ""
+    first_device = "sdk"
+else
+    disk_verify_val = last_device[-1]
     new_device_val = disk_verify_val + 1
     new_device_chr = new_device_val.chr 
     first_device = "sd" + "#{new_device_chr}"
-else
-    first_device = "sdk"
 end
 device_val = first_device[-1]
 device_limit = device_val + node[:inmobi_cloud][:number_of_volumes].to_i
@@ -105,6 +109,7 @@ bash "volume_attachment" do
               		break
           	done
 	    done
+	/bin/rm -f /tmp/vol* /tmp/server* /tmp/disk /tmp/my*
     EOH
 end
-sleep 120
+sleep 240

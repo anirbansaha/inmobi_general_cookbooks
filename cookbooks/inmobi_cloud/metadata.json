@@ -27,8 +27,7 @@
       ],
       "type": "string",
       "recipes": [
-        "inmobi_cloud::ebs_create_attach",
-        "inmobi_cloud::ebs_create_attach_test"
+        "inmobi_cloud::ebs_create_attach"
       ],
       "description": "The password required to make RightScale API call, has to be set to the CREDENTIAL variable RSCALE_PASSWD from RS dashboard inputs",
       "display_name": "RightScale password"
@@ -41,8 +40,7 @@
       ],
       "type": "string",
       "recipes": [
-        "inmobi_cloud::ebs_create_attach",
-        "inmobi_cloud::ebs_create_attach_test"
+        "inmobi_cloud::ebs_create_attach"
       ],
       "description": "Size of EBS volumes required to be created and attached to the instance, has to be given a value of type TEXT, e.g. 50 if 50G volumes are to be attached",
       "display_name": "Size of EBS volumes required"
@@ -72,8 +70,7 @@
       "recipes": [
         "inmobi_cloud::base_os_config",
         "inmobi_cloud::hostname_change_config",
-        "inmobi_cloud::ebs_create_attach",
-        "inmobi_cloud::ebs_create_attach_test"
+        "inmobi_cloud::ebs_create_attach"
       ],
       "description": "The ec2 availability zone of the instance to be launched, has to be set to the ENV variable EC2_AVAILABILITY_ZONE from RS dashboard inputs",
       "display_name": "Availability zone of the instance"
@@ -102,8 +99,7 @@
       ],
       "type": "string",
       "recipes": [
-        "inmobi_cloud::ebs_create_attach",
-        "inmobi_cloud::ebs_create_attach_test"
+        "inmobi_cloud::ebs_create_attach"
       ],
       "description": "The username required to make RightScale API call, has to be set to the CREDENTIAL variable RSCALE_USER from RS dashboard inputs",
       "display_name": "RightScale username"
@@ -116,8 +112,7 @@
       ],
       "type": "string",
       "recipes": [
-        "inmobi_cloud::ebs_create_attach",
-        "inmobi_cloud::ebs_create_attach_test"
+        "inmobi_cloud::ebs_create_attach"
       ],
       "description": "Number of EBS volumes required to be created and attached to the instance, has to be given a value of type TEXT, e.g. 4 if four EBS volumes are to be attached",
       "display_name": "Number of EBS volumes required"
@@ -135,8 +130,7 @@
         "inmobi_cloud::dns_add_record",
         "inmobi_cloud::dns_delete_record",
         "inmobi_cloud::hostname_change_config",
-        "inmobi_cloud::ebs_create_attach",
-        "inmobi_cloud::ebs_create_attach_test"
+        "inmobi_cloud::ebs_create_attach"
       ],
       "description": "The FQDN of the instance to be launched, has to be set to the ENV variable RS_SERVER_NAME from RS dashboard inputs",
       "display_name": "Nickname of the instance"
@@ -154,7 +148,6 @@
   },
   "recipes": {
     "inmobi_cloud::base_os_config": "Configures basic OS files",
-    "inmobi_cloud::ebs_create_attach_test": "Creates ebs volumes and attaches to the instance based on the inputs entered, i.e. number of volumes required and size of each volume",
     "inmobi_cloud::dns_delete_record": "Removes DNS entry for UltraDNS",
     "inmobi_cloud::apt_repo_config": "Configures apt repo files",
     "inmobi_cloud::ebs_create_attach": "Creates ebs volumes and attaches to the instance based on the inputs entered, i.e. number of volumes required and size of each volume",
