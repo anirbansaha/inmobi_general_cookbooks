@@ -72,7 +72,7 @@ bash "get_volume_list" do
     EOH
 end
 
-disk_verify = `ls -l /dev | grep disk | grep sd | awk '{ print $NF }' | sort | grep -A20 sdj | tail -n 1`.chomp
+disk_verify = `ls -l /dev | grep disk | grep sd | awk '{ print $NF }' | sort | grep -A20 sdk | tail -n 1`.chomp
 if disk_verify != ""
     disk_verify_val = disk_verify[-1]
     new_device_val = disk_verify_val + 1
