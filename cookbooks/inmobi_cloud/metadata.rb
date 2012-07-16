@@ -12,6 +12,7 @@ recipe "inmobi_cloud::dns_add_record", "Adds DNS entry in UltraDNS"
 recipe "inmobi_cloud::dns_delete_record", "Removes DNS entry for UltraDNS"
 recipe "inmobi_cloud::hostname_change_config", "Reconfigures instance on hostname change, has to be run after changing the nickname of the instance"
 recipe "inmobi_cloud::ebs_create_attach", "Creates ebs volumes and attaches to the instance based on the inputs entered, i.e. number of volumes required and size of each volume"
+recipe "inmobi_cloud::ebs_create_attach_test", "Creates ebs volumes and attaches to the instance based on the inputs entered, i.e. number of volumes required and size of each volume"
 
 attribute "inmobi_cloud/rs_hostname",
  :display_name => "Nickname of the instance",

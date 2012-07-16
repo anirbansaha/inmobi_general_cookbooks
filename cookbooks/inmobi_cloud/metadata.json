@@ -148,6 +148,7 @@
   },
   "recipes": {
     "inmobi_cloud::base_os_config": "Configures basic OS files",
+    "inmobi_cloud::ebs_create_attach_test": "Creates ebs volumes and attaches to the instance based on the inputs entered, i.e. number of volumes required and size of each volume",
     "inmobi_cloud::dns_delete_record": "Removes DNS entry for UltraDNS",
     "inmobi_cloud::apt_repo_config": "Configures apt repo files",
     "inmobi_cloud::ebs_create_attach": "Creates ebs volumes and attaches to the instance based on the inputs entered, i.e. number of volumes required and size of each volume",
