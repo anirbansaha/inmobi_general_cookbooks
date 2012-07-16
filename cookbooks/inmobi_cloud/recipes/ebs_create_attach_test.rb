@@ -43,6 +43,9 @@ bash "rightscale_info" do
     EOH
 end
 
+last_chr = 0
+disk_val = 0
+limit = 0
 vol_verify_out = `cat /tmp/vol_verify`.chomp
 vol_verify = vol_verify_out.to_s
 if vol_verify != "0"
@@ -69,11 +72,12 @@ bash "volume_creation" do
     EOH
 end
 
-sleep 120
+sleep 200
 
 this_server_url = `cat /tmp/server_url`.chomp
 this_server_volume_url = "#{this_server_url}" + "/attach_volume"
 
+log "#{this_server_url}"
 log "#{this_server_volume_url}"
 
 bash "get_volume_list" do
@@ -82,6 +86,7 @@ bash "get_volume_list" do
     EOH
 end
 
+first_device = ""
 disk_verify = `cat /tmp/disk`.chomp
 if disk_verify != ""
     disk_verify_val = disk_verify[-1]
