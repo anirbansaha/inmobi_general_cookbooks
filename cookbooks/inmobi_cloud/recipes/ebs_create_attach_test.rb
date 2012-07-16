@@ -87,12 +87,12 @@ bash "get_volume_list" do
 end
 
 first_device = ""
-disk_verify = `cat /tmp/disk`.chomp
-log "#{disk_verify}"
-if disk_verify == ""
+last_device = `cat /tmp/disk`.chomp
+log "#{last_device}"
+if last_device == ""
     first_device = "sdk"
 else
-    disk_verify_val = disk_verify[-1]
+    disk_verify_val = last_device[-1]
     new_device_val = disk_verify_val + 1
     new_device_chr = new_device_val.chr 
     first_device = "sd" + "#{new_device_chr}"
