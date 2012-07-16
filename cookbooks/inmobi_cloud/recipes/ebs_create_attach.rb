@@ -33,11 +33,18 @@ bash "rightscale_info" do
     code <<-EOH
       /usr/bin/curl -c /tmp/mySavedCookies -u "#{node[:inmobi_cloud][:rscale_username]}":"#{node[:inmobi_cloud][:rscale_password]}" #{inmobi_rs_url}
       /usr/bin/curl -X GET -s -H "X-API-VERSION: 1.0" -b /tmp/mySavedCookies -d "cloud_id=#{cloud_def[aws_region]}" #{inmobi_rs_volume_url} | grep "#{hostname_fqdn}"-vol | cut -d'>' -f2 | cut -d'<' -f1 | wc -l > /tmp/vol_verify
+      VERIFY=`cat /tmp/vol_verify`
+      if [ $VERIFY != "0" ]
+      then
       /usr/bin/curl -X GET -s -H "X-API-VERSION: 1.0" -b /tmp/mySavedCookies -d "cloud_id=#{cloud_def[aws_region]}" #{inmobi_rs_volume_url} | grep "#{hostname_fqdn}"-vol | tail -n 1 | cut -d'>' -f2 | cut -d'<' -f1 > /tmp/vol_lastvol
+      fi
+      /usr/bin/curl -X GET -s -H "X-API-VERSION: 1.0" -b /tmp/mySavedCookies #{inmobi_rs_servers_url} | grep -A2 #{hostname_fqdn} | grep href | sed 's/href>/#/g' | cut -d'<' -f2 | sed 's/#//g' > /tmp/server_url
+      ls -l /dev | grep disk | grep sd | awk '{ print $NF }' | sort | grep -A20 sdk | tail -n 1 > /tmp/disk
     EOH
 end
 
-vol_verify = `cat /tmp/vol_verify`.chomp
+vol_verify_out = `cat /tmp/vol_verify`.chomp
+vol_verify = vol_verify_out.to_s
 if vol_verify != "0"
       present_vol = `cat /tmp/vol_lastvol`.chomp
       last_chr_str = present_vol[-1,1]
@@ -63,7 +70,7 @@ end
 
 sleep 120
 
-this_server_url = `/usr/bin/curl -X GET -s -H "X-API-VERSION: 1.0" -b /tmp/mySavedCookies #{inmobi_rs_servers_url} | grep -A2 #{hostname_fqdn} | grep href | sed 's/href>/#/g' | cut -d'<' -f2 | sed 's/#//g'`.chomp
+this_server_url = `cat /tmp/server_url`.chomp
 this_server_volume_url = "#{this_server_url}" + "/attach_volume"
 
 bash "get_volume_list" do
@@ -72,7 +79,7 @@ bash "get_volume_list" do
     EOH
 end
 
-disk_verify = `ls -l /dev | grep disk | grep sd | awk '{ print $NF }' | sort | grep -A20 sdk | tail -n 1`.chomp
+disk_verify = `cat /tmp/disk`.chomp
 if disk_verify != ""
     disk_verify_val = disk_verify[-1]
     new_device_val = disk_verify_val + 1
