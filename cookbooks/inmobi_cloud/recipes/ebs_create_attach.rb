@@ -105,7 +105,6 @@ bash "volume_attachment" do
               		break
           	done
 	    done
-	/bin/rm -f /tmp/vol* /tmp/disk /tmp/server*
     EOH
 end
 sleep 120
