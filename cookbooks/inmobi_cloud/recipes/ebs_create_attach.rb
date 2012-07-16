@@ -61,7 +61,7 @@ bash "volume_creation" do
     EOH
 end
 
-sleep 60
+sleep 120
 
 this_server_url = `/usr/bin/curl -X GET -s -H "X-API-VERSION: 1.0" -b /tmp/mySavedCookies #{inmobi_rs_servers_url} | grep -A2 #{hostname_fqdn} | grep href | sed 's/href>/#/g' | cut -d'<' -f2 | sed 's/#//g'`.chomp
 this_server_volume_url = "#{this_server_url}" + "/attach_volume"
