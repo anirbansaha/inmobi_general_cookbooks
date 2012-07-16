@@ -60,3 +60,45 @@ bash "volume_creation" do
 	done
     EOH
 end
+
+sleep 60
+
+this_server_url = `/usr/bin/curl -X GET -s -H "X-API-VERSION: 1.0" -b /tmp/mySavedCookies #{inmobi_rs_servers_url} | grep -A2 #{hostname_fqdn} | grep href | sed 's/href>/#/g' | cut -d'<' -f2 | sed 's/#//g'`.chomp
+this_server_volume_url = "#{this_server_url}" + "/attach_volume"
+
+bash "get_volume_list" do
+    code <<-EOH
+	/usr/bin/curl -X GET -s -H "X-API-VERSION: 1.0" -b /tmp/mySavedCookies -d "cloud_id=#{cloud_def[aws_region]}" #{inmobi_rs_volume_url} | grep -A9 available | grep -A3 #{hostname_fqdn} | grep href | sed 's/href>/#/g' | cut -d'<' -f2 | sed 's/#//g' > /tmp/volumes
+    EOH
+end
+
+disk_verify = `ls -l /dev | grep disk | grep sd | awk '{ print $NF }' | sort | grep -A20 sdj | tail -n 1`.chomp
+if disk_verify != ""
+    disk_verify_val = disk_verify[-1]
+    new_device_val = disk_verify_val + 1
+    new_device_chr = new_device_val.chr 
+    first_device = "sd" + "#{new_device_chr}"
+else
+    first_device = "sdk"
+end
+device_val = first_device[-1]
+device_limit = device_val + node[:inmobi_cloud][:number_of_volumes].to_i
+
+bash "volume_attachment" do
+    code <<-EOH
+	for (( num=#{device_val}; num<#{device_limit}; num++ ))
+	    do
+       		for url in `cat /tmp/volumes`
+          	do
+              		export AVALUE_LDISK=$num
+              		DISKCHR=`perl -e 'printf "%c\n", $ENV{'AVALUE_LDISK'};'`
+              		DEVICE=/dev/sd$DISKCHR
+              		/usr/bin/curl -X POST  -s -H "X-API-VERSION: 1.0" -b /tmp/mySavedCookies -d "server[ec2_ebs_volume_href]=$url" -d "server[device]=$DEVICE" #{this_server_volume_url}
+             	 	sed -i '1,1d' /tmp/volumes
+              		break
+          	done
+	    done
+    EOH
+end
+
+sleep 120
