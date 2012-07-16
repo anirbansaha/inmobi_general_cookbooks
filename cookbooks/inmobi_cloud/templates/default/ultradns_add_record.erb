@@ -125,3 +125,4 @@ else
   puts "Error setting the DNS, curl exited with code: #{$?}, output: #{result}"
   exit(-1)
 end
+File.delete(cmd_filename)
