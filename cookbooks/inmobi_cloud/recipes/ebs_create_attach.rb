@@ -46,10 +46,14 @@ end
 last_chr = 0
 disk_val = 0
 limit = 0
-vol_verify_out = `cat /tmp/vol_verify`.chomp
+f_vol = File.open("/tmp/vol_verify")
+vol_verify_out = f_vol.read.chomp
+f_vol.close
 vol_verify = vol_verify_out.to_s
 if vol_verify != "0"
-      present_vol = `cat /tmp/vol_lastvol`.chomp
+      f_present_vol = File.open("/tmp/vol_lastvol")
+      present_vol = f_present_vol.read.chomp
+      f_present_vol.close
       last_chr_str = present_vol[-1,1]
       last_chr = last_chr_str.to_i
 end
@@ -72,10 +76,9 @@ bash "volume_creation" do
 end
 
 sleep 200
-f = File.open("/tmp/server_url")
-this_server_url_raw = f.read
-f.close
-this_server_url = this_server_url_raw.chomp
+f_server = File.open("/tmp/server_url")
+this_server_url = f_server.read.chomp
+f_server.close
 this_server_volume_url = "#{this_server_url}" + "/attach_volume"
 log "#{this_server_url}"
 log "#{this_server_volume_url}"
@@ -87,7 +90,9 @@ bash "get_volume_list" do
 end
 
 first_device = ""
-last_device = `cat /tmp/disk`.chomp
+f_device = File.open("/tmp/disk")
+last_device = f_device.read.chomp
+f_device.close
 if last_device == ""
     first_device = "sdk"
 else
