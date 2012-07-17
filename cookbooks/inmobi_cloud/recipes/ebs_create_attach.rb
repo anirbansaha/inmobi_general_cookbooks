@@ -113,7 +113,7 @@ server_id = `/usr/bin/curl -X GET -s -H "X-API-VERSION: 1.0" -b /tmp/mySavedCook
 #	f_server.close
 #end
 this_server_volume_url = "#{inmobi_rs_servers_url}" + "/#{server_id}" + "/attach_volume"
-log "#{this_server_url}"
+log "#{server_id}"
 log "#{this_server_volume_url}"
 
 bash "get_volume_list" do
