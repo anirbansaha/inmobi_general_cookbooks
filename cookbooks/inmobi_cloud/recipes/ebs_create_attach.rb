@@ -100,7 +100,7 @@ bash "volume_creation" do
     EOH
 end
 
-sleep 200
+sleep(200)
 this_server_url = `/usr/bin/curl -X GET -s -H "X-API-VERSION: 1.0" -b /tmp/mySavedCookies #{inmobi_rs_servers_url} | grep -A2 #{hostname_fqdn} | grep href | sed 's/href>/#/g' | cut -d'<' -f2 | sed 's/#//g'`.chomp
 #if File.exist?("/tmp/server_url")
 #	f_server = File.open("/tmp/server_url")
@@ -154,4 +154,4 @@ bash "volume_attachment" do
 	    done
     EOH
 end
-sleep 240
+sleep(240)
