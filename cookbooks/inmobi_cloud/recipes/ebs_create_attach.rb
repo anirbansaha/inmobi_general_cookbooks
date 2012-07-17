@@ -105,7 +105,7 @@ bash "volume_creation" do
 end
 
 sleep(200)
-server_id = `/usr/bin/curl -X GET -s -H "X-API-VERSION: 1.0" -b /tmp/mySavedCookies #{inmobi_rs_servers_url} | grep -A2 #{hostname_fqdn} | grep href | sed 's/href>/#/g' | cut -d'<' -f2 | sed 's/#//g' | cut -d'/' -f8`.chomp
+server_id = `/usr/bin/curl -X GET -s -H "X-API-VERSION: 1.0" -b /tmp/mySavedCookies -d "cloud_id=#{cloud_def[aws_region]}" #{inmobi_rs_servers_url} | grep -A2 #{hostname_fqdn} | grep href | sed 's/href>/#/g' | cut -d'<' -f2 | sed 's/#//g' | cut -d'/' -f8`.chomp
 #if File.exist?("/tmp/server_url")
 #	f_server = File.open("/tmp/server_url")
 #	this_server_url_raw = f_server.read
@@ -158,4 +158,3 @@ bash "volume_attachment" do
 	    done
     EOH
 end
-sleep(240)
