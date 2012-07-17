@@ -73,7 +73,8 @@ limit = 0
 vol_verify = ""
 if File.exist?("/tmp/vol_verify")
 	f_vol = File.open("/tmp/vol_verify")
-	vol_verify_out = f_vol.read.chomp
+	vol_verify_out_raw = f_vol.read
+	vol_verify_out = vol_verify_out_raw.chomp
 	f_vol.close
 	vol_verify = vol_verify_out.to_s
 end
@@ -81,7 +82,8 @@ end
 if vol_verify != "0"
    if File.exist?("/tmp/vol_lastvol")
       f_present_vol = File.open("/tmp/vol_lastvol")
-      present_vol = f_present_vol.read.chomp
+      present_vol_raw = f_present_vol.read
+      present_vol = present_vol_raw.chomp
       f_present_vol.close
       last_chr_str = present_vol[-1,1]
       last_chr = last_chr_str.to_i
@@ -109,7 +111,8 @@ sleep 200
 this_server_url = ""
 if File.exist?("/tmp/server_url")
 	f_server = File.open("/tmp/server_url")
-	this_server_url = f_server.read.chomp
+	this_server_url_raw = f_server.read
+	this_server_url = this_server_url_raw.chomp
 	f_server.close
 end
 this_server_volume_url = "#{this_server_url}" + "/attach_volume"
@@ -126,7 +129,8 @@ first_device = ""
 last_device = ""
 if File.exist?("/tmp/disk")
 	f_device = File.open("/tmp/disk")
-	last_device = f_device.read.chomp
+	last_device_raw = f_device.read
+	last_device = last_device_raw.chomp
 	f_device.close
 end
 if last_device == ""
