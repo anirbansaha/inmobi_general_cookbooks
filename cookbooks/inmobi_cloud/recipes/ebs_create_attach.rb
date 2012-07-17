@@ -16,6 +16,30 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+template "/tmp/vol_lastvol" do
+    source "blankfile.erb"
+    owner "root"
+    group "root"
+    mode "0644"
+end
+template "/tmp/vol_verify" do
+    source "blankfile.erb"
+    owner "root"
+    group "root"
+    mode "0644"
+end
+template "/tmp/server_url" do
+    source "blankfile.erb"
+    owner "root"
+    group "root"
+    mode "0644"
+end
+template "/tmp/disk" do
+    source "blankfile.erb"
+    owner "root"
+    group "root"
+    mode "0644"
+end
 
 #Define cloud IDs and API URLs
 inmobi_acct_id = "55593"
