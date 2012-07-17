@@ -16,30 +16,30 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-template "/tmp/vol_lastvol" do
-    source "blankfile.erb"
-    owner "root"
-    group "root"
-    mode "0644"
-end
-template "/tmp/vol_verify" do
-    source "blankfile.erb"
-    owner "root"
-    group "root"
-    mode "0644"
-end
-template "/tmp/server_url" do
-    source "blankfile.erb"
-    owner "root"
-    group "root"
-    mode "0644"
-end
-template "/tmp/disk" do
-    source "blankfile.erb"
-    owner "root"
-    group "root"
-    mode "0644"
-end
+#template "/tmp/vol_lastvol" do
+#    source "blankfile.erb"
+#    owner "root"
+#    group "root"
+#    mode "0644"
+#end
+#template "/tmp/vol_verify" do
+#    source "blankfile.erb"
+#    owner "root"
+#    group "root"
+#    mode "0644"
+#end
+#template "/tmp/server_url" do
+#    source "blankfile.erb"
+#    owner "root"
+#    group "root"
+#    mode "0644"
+#end
+#template "/tmp/disk" do
+#    source "blankfile.erb"
+#    owner "root"
+#    group "root"
+#    mode "0644"
+#end
 
 #Define cloud IDs and API URLs
 inmobi_acct_id = "55593"
@@ -56,38 +56,31 @@ hostname_fqdn = "#{node.inmobi_cloud.rs_hostname}".downcase
 bash "rightscale_info" do
     code <<-EOH
       /usr/bin/curl -c /tmp/mySavedCookies -u "#{node[:inmobi_cloud][:rscale_username]}":"#{node[:inmobi_cloud][:rscale_password]}" #{inmobi_rs_url}
-      /usr/bin/curl -X GET -s -H "X-API-VERSION: 1.0" -b /tmp/mySavedCookies -d "cloud_id=#{cloud_def[aws_region]}" #{inmobi_rs_volume_url} | grep "#{hostname_fqdn}"-vol | cut -d'>' -f2 | cut -d'<' -f1 | wc -l > /tmp/vol_verify
-      VERIFY=`cat /tmp/vol_verify`
-      if [ $VERIFY != "0" ]
-      then
-      /usr/bin/curl -X GET -s -H "X-API-VERSION: 1.0" -b /tmp/mySavedCookies -d "cloud_id=#{cloud_def[aws_region]}" #{inmobi_rs_volume_url} | grep "#{hostname_fqdn}"-vol | tail -n 1 | cut -d'>' -f2 | cut -d'<' -f1 > /tmp/vol_lastvol
-      fi
-      /usr/bin/curl -X GET -s -H "X-API-VERSION: 1.0" -b /tmp/mySavedCookies #{inmobi_rs_servers_url} | grep -A2 #{hostname_fqdn} | grep href | sed 's/href>/#/g' | cut -d'<' -f2 | sed 's/#//g' > /tmp/server_url
-      ls -l /dev | grep disk | grep sd | awk '{ print $NF }' | sort | grep -A20 sdk | tail -n 1 > /tmp/disk
     EOH
 end
-
 last_chr = 0
 disk_val = 0
 limit = 0
-vol_verify = ""
-if File.exist?("/tmp/vol_verify")
-	f_vol = File.open("/tmp/vol_verify")
-	vol_verify_out_raw = f_vol.read
-	vol_verify_out = vol_verify_out_raw.chomp
-	f_vol.close
-	vol_verify = vol_verify_out.to_s
-end
+vol_verify_out = `/usr/bin/curl -X GET -s -H "X-API-VERSION: 1.0" -b /tmp/mySavedCookies -d "cloud_id=#{cloud_def[aws_region]}" #{inmobi_rs_volume_url} | grep "#{hostname_fqdn}"-vol | cut -d'>' -f2 | cut -d'<' -f1 | wc -l`.chomp
+vol_verify = vol_verify_out.to_s
+#if File.exist?("/tmp/vol_verify")
+#	f_vol = File.open("/tmp/vol_verify")
+#	vol_verify_out_raw = f_vol.read
+#	vol_verify_out = vol_verify_out_raw.chomp
+#	f_vol.close
+#	vol_verify = vol_verify_out.to_s
+#end
 
 if vol_verify != "0"
-   if File.exist?("/tmp/vol_lastvol")
-      f_present_vol = File.open("/tmp/vol_lastvol")
-      present_vol_raw = f_present_vol.read
-      present_vol = present_vol_raw.chomp
-      f_present_vol.close
+#   if File.exist?("/tmp/vol_lastvol")
+#      f_present_vol = File.open("/tmp/vol_lastvol")
+#      present_vol_raw = f_present_vol.read
+#      present_vol = present_vol_raw.chomp
+#      f_present_vol.close
+      present_vol = `/usr/bin/curl -X GET -s -H "X-API-VERSION: 1.0" -b /tmp/mySavedCookies -d "cloud_id=#{cloud_def[aws_region]}" #{inmobi_rs_volume_url} | grep "#{hostname_fqdn}"-vol | tail -n 1 | cut -d'>' -f2 | cut -d'<' -f1`.chomp
       last_chr_str = present_vol[-1,1]
       last_chr = last_chr_str.to_i
-   end
+#   end
 end
 
 if vol_verify == "0"
@@ -108,13 +101,13 @@ bash "volume_creation" do
 end
 
 sleep 200
-this_server_url = ""
-if File.exist?("/tmp/server_url")
-	f_server = File.open("/tmp/server_url")
-	this_server_url_raw = f_server.read
-	this_server_url = this_server_url_raw.chomp
-	f_server.close
-end
+this_server_url = `/usr/bin/curl -X GET -s -H "X-API-VERSION: 1.0" -b /tmp/mySavedCookies #{inmobi_rs_servers_url} | grep -A2 #{hostname_fqdn} | grep href | sed 's/href>/#/g' | cut -d'<' -f2 | sed 's/#//g'`.chomp
+#if File.exist?("/tmp/server_url")
+#	f_server = File.open("/tmp/server_url")
+#	this_server_url_raw = f_server.read
+#	this_server_url = this_server_url_raw.chomp
+#	f_server.close
+#end
 this_server_volume_url = "#{this_server_url}" + "/attach_volume"
 log "#{this_server_url}"
 log "#{this_server_volume_url}"
@@ -126,13 +119,13 @@ bash "get_volume_list" do
 end
 
 first_device = ""
-last_device = ""
-if File.exist?("/tmp/disk")
-	f_device = File.open("/tmp/disk")
-	last_device_raw = f_device.read
-	last_device = last_device_raw.chomp
-	f_device.close
-end
+last_device = `ls -l /dev | grep disk | grep sd | awk '{ print $NF }' | sort | grep -A20 sdk | tail -n 1`.chomp
+#if File.exist?("/tmp/disk")
+#	f_device = File.open("/tmp/disk")
+#	last_device_raw = f_device.read
+#	last_device = last_device_raw.chomp
+#	f_device.close
+#end
 if last_device == ""
     first_device = "sdk"
 else
