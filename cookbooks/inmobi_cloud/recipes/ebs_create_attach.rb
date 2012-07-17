@@ -63,6 +63,7 @@ disk_val = 0
 limit = 0
 vol_verify_out = `/usr/bin/curl -X GET -s -H "X-API-VERSION: 1.0" -b /tmp/mySavedCookies -d "cloud_id=#{cloud_def[aws_region]}" #{inmobi_rs_volume_url} | grep "#{hostname_fqdn}"-vol | cut -d'>' -f2 | cut -d'<' -f1 | wc -l`.chomp
 vol_verify = vol_verify_out.to_s
+log "#{vol_verify}"
 #if File.exist?("/tmp/vol_verify")
 #	f_vol = File.open("/tmp/vol_verify")
 #	vol_verify_out_raw = f_vol.read
@@ -82,6 +83,7 @@ if vol_verify != "0"
       last_chr = last_chr_str.to_i
 #   end
 end
+log "#{last_chr}"
 
 if vol_verify == "0"
       disk_val = 1
@@ -90,6 +92,8 @@ else
       disk_val = last_chr + 1
       limit = last_chr + node[:inmobi_cloud][:number_of_volumes].to_i
 end
+
+log "#{disk_val} #{limit}"
 
 bash "volume_creation" do
     code <<-EOH
