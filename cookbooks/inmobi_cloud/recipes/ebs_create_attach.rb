@@ -105,14 +105,14 @@ bash "volume_creation" do
 end
 
 sleep(200)
-this_server_url = `/usr/bin/curl -X GET -s -H "X-API-VERSION: 1.0" -b /tmp/mySavedCookies #{inmobi_rs_servers_url} | grep -A2 #{hostname_fqdn} | grep href | sed 's/href>/#/g' | cut -d'<' -f2 | sed 's/#//g'`.chomp
+server_id = `/usr/bin/curl -X GET -s -H "X-API-VERSION: 1.0" -b /tmp/mySavedCookies #{inmobi_rs_servers_url} | grep -A2 #{hostname_fqdn} | grep href | sed 's/href>/#/g' | cut -d'<' -f2 | sed 's/#//g' | cut -d'/' -f8`.chomp
 #if File.exist?("/tmp/server_url")
 #	f_server = File.open("/tmp/server_url")
 #	this_server_url_raw = f_server.read
 #	this_server_url = this_server_url_raw.chomp
 #	f_server.close
 #end
-this_server_volume_url = "#{this_server_url}" + "/attach_volume"
+this_server_volume_url = "#{inmobi_rs_servers_url}" + "/#{server_id}" + "/attach_volume"
 log "#{this_server_url}"
 log "#{this_server_volume_url}"
 
