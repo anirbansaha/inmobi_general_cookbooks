@@ -38,35 +38,14 @@ bash "rightscale_info" do
     EOH
 end
 
-last_chr = 0
-disk_val = 0
-limit = 0
 vol_verify_out = `/usr/bin/curl -X GET -s -H "X-API-VERSION: 1.0" -b /tmp/mySavedCookies -d "cloud_id=#{cloud_def[aws_region]}" #{inmobi_rs_volume_url} | grep "#{hostname_fqdn}"-vol | cut -d'>' -f2 | cut -d'<' -f1 | wc -l`.chomp
 vol_verify = vol_verify_out.to_s
-if vol_verify != "0"
-      present_vol = `/usr/bin/curl -X GET -s -H "X-API-VERSION: 1.0" -b /tmp/mySavedCookies -d "cloud_id=#{cloud_def[aws_region]}" #{inmobi_rs_volume_url} | grep "#{hostname_fqdn}"-vol | tail -n 1 | cut -d'>' -f2 | cut -d'<' -f1`.chomp
-      last_chr_str = present_vol[-1,1]
-      last_chr = last_chr_str.to_i
-end
 
 if vol_verify == "0"
-      disk_val = 1
-      limit = node[:inmobi_cloud][:number_of_volumes].to_i
-else
-      disk_val = last_chr + 1
-      limit = last_chr + node[:inmobi_cloud][:number_of_volumes].to_i
+     exit(0)
 end
+vol_number = vol_verify.to_i
 
-bash "volume_creation" do
-    code <<-EOH
-	for (( num=#{disk_val}; num<=#{limit}; num++ ))
-	do
-	      /usr/bin/curl -X POST -s -H "X-API-VERSION: 1.0" -b /tmp/mySavedCookies -d "cloud_id=#{cloud_def[aws_region]}" -d "ec2_ebs_volume[nickname]=#{hostname_fqdn}-vol$num" -d "ec2_ebs_volume[description]=#{hostname_fqdn}-Volume$num" -d "ec2_ebs_volume[ec2_availability_zone]=#{node[:inmobi_cloud][:availability_zone]}" -d "ec2_ebs_volume[aws_size]=#{node[:inmobi_cloud][:size_of_volume]}" #{inmobi_rs_volume_url}
-	done
-    EOH
-end
-
-sleep(200)
 bash "get_volume_list" do
     code <<-EOH
 	/usr/bin/curl -X GET -s -H "X-API-VERSION: 1.0" -b /tmp/mySavedCookies -d "cloud_id=#{cloud_def[aws_region]}" #{inmobi_rs_volume_url} | grep -A9 available | grep -A3 #{hostname_fqdn} | grep href | sed 's/href>/#/g' | cut -d'<' -f2 | sed 's/#//g' > /tmp/volumes
@@ -84,7 +63,7 @@ else
     first_device = "sd" + "#{new_device_chr}"
 end
 device_val = first_device[-1]
-device_limit = device_val + node[:inmobi_cloud][:number_of_volumes].to_i
+device_limit = device_val + vol_number
 
 bash "volume_attachment" do
     code <<-EOH
@@ -100,6 +79,6 @@ bash "volume_attachment" do
               		break
           	done
 	    done
-	rm -f /tmp/vol* /tmp/server* /tmp/mySavedCookies
+	rm -f /tmp/server* /tmp/vol* /tmp/mySavedCookies
     EOH
 end
