@@ -56,7 +56,10 @@ hostname_fqdn = "#{node.inmobi_cloud.rs_hostname}".downcase
 bash "rightscale_info" do
     code <<-EOH
       /usr/bin/curl -c /tmp/mySavedCookies -u "#{node[:inmobi_cloud][:rscale_username]}":"#{node[:inmobi_cloud][:rscale_password]}" #{inmobi_rs_url}
-      /usr/bin/curl -X GET -s -H "X-API-VERSION: 1.0" -b /tmp/mySavedCookies -d "cloud_id=#{cloud_def[aws_region]}" #{inmobi_rs_servers_url} | grep -A2 #{hostname_fqdn} | grep href | sed 's/href>/#/g' | cut -d'<' -f2 | sed 's/#//g' | cut -d'/' -f8 > /tmp/server_id
+      /usr/bin/curl -X GET -s -H "X-API-VERSION: 1.0" -b /tmp/mySavedCookies -d "cloud_id=#{cloud_def[aws_region]}" #{inmobi_rs_servers_url} | grep -A2 #{hostname_fqdn} | grep href | sed 's/href>/#/g' | cut -d'<' -f2 | sed 's/#//g' > /tmp/server_id
+      server_id=`cat /tmp/server_id`
+      server_url=#{inmobi_rs_servers_url}"/"$server_id"/attach_volume"
+      echo $server_url > /tmp/server_url
     EOH
 end
 last_chr = 0
@@ -106,22 +109,15 @@ bash "volume_creation" do
 end
 
 sleep(200)
-server_id = ""
-if File.exists?("/tmp/server_id")
-   f_server = File.open("/tmp/server_id")
-   server_id_raw = f_server.readline
-   server_id = server_id_raw.chomp
-   f_server.close
-end
 #if File.exist?("/tmp/server_url")
 #	f_server = File.open("/tmp/server_url")
 #	this_server_url_raw = f_server.read
 #	this_server_url = this_server_url_raw.chomp
 #	f_server.close
 #end
-this_server_volume_url = "#{inmobi_rs_servers_url}" + "/#{server_id}" + "/attach_volume"
-log "#{server_id}"
-log "#{this_server_volume_url}"
+#this_server_volume_url = "#{inmobi_rs_servers_url}" + "/#{server_id}" + "/attach_volume"
+#log "#{server_id}"
+#log "#{this_server_volume_url}"
 
 bash "get_volume_list" do
     code <<-EOH
@@ -158,7 +154,7 @@ bash "volume_attachment" do
               		export AVALUE_LDISK=$num
               		DISKCHR=`perl -e 'printf "%c\n", $ENV{'AVALUE_LDISK'};'`
               		DEVICE=/dev/sd$DISKCHR
-              		/usr/bin/curl -X POST  -s -H "X-API-VERSION: 1.0" -b /tmp/mySavedCookies -d "server[ec2_ebs_volume_href]=$url" -d "server[device]=$DEVICE" #{this_server_volume_url}
+              		/usr/bin/curl -X POST  -s -H "X-API-VERSION: 1.0" -b /tmp/mySavedCookies -d "server[ec2_ebs_volume_href]=$url" -d "server[device]=$DEVICE" `cat /tmp/server_url`
              	 	sed -i '1,1d' /tmp/volumes
               		break
           	done
