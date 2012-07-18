@@ -35,16 +35,18 @@ bash "rightscale_info" do
       server_id=`cat /tmp/server_id`
       server_url=$server_id"/attach_volume"
       echo $server_url > /tmp/server_url
+      /usr/bin/curl -X GET -s -H "X-API-VERSION: 1.0" -b /tmp/mySavedCookies -d "cloud_id=#{cloud_def[aws_region]}" #{inmobi_rs_volume_url} | grep "#{hostname_fqdn}"-vol | wc -l > /tmp/vol_verify
+      /usr/bin/curl -X GET -s -H "X-API-VERSION: 1.0" -b /tmp/mySavedCookies -d "cloud_id=#{cloud_def[aws_region]}" #{inmobi_rs_volume_url} | grep "#{hostname_fqdn}"-vol | tail -n 1 | cut -d'>' -f2 | cut -d'<' -f1 > /tmp/vol_lastvol
     EOH
 end
 
 last_chr = 0
 disk_val = 0
 limit = 0
-vol_verify_out = `/usr/bin/curl -X GET -s -H "X-API-VERSION: 1.0" -b /tmp/mySavedCookies -d "cloud_id=#{cloud_def[aws_region]}" #{inmobi_rs_volume_url} | grep "#{hostname_fqdn}"-vol | cut -d'>' -f2 | cut -d'<' -f1 | wc -l`.chomp
+vol_verify_out = `cat /tmp/vol_verify`.chomp
 vol_verify = vol_verify_out.to_s
 if vol_verify != "0"
-      present_vol = `/usr/bin/curl -X GET -s -H "X-API-VERSION: 1.0" -b /tmp/mySavedCookies -d "cloud_id=#{cloud_def[aws_region]}" #{inmobi_rs_volume_url} | grep "#{hostname_fqdn}"-vol | tail -n 1 | cut -d'>' -f2 | cut -d'<' -f1`.chomp
+      present_vol = `cat /tmp/vol_lastvol`.chomp
       last_chr_str = present_vol[-1,1]
       last_chr = last_chr_str.to_i
 end
