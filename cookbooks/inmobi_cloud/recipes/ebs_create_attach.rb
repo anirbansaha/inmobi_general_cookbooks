@@ -106,7 +106,13 @@ bash "volume_creation" do
 end
 
 sleep(200)
-server_id = `cat /tmp/server_id`.chomp
+server_id = ""
+if File.exists?("/tmp/server_id")
+   f_server = File.open("/tmp/server_id")
+   server_id_raw = f_server.readline
+   server_id = server_id_raw.chomp
+   f_server.close
+end
 #if File.exist?("/tmp/server_url")
 #	f_server = File.open("/tmp/server_url")
 #	this_server_url_raw = f_server.read
