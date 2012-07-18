@@ -72,21 +72,21 @@ end
 device_val = first_device[-1]
 device_limit = device_val + vol_number
 
-bash "volume_attachment" do
-    code <<-EOH
-	for (( num=#{device_val}; num<#{device_limit}; num++ ))
-	    do
-       		for url in `cat /tmp/volumes`
-          	do
-              		export AVALUE_LDISK=$num
-              		DISKCHR=`perl -e 'printf "%c\n", $ENV{'AVALUE_LDISK'};'`
-              		DEVICE=/dev/sd$DISKCHR
-              		/usr/bin/curl -X POST  -s -H "X-API-VERSION: 1.0" -b /tmp/mySavedCookies -d "server[ec2_ebs_volume_href]=$url" -d "server[device]=$DEVICE" `cat /tmp/server_url`
-             	 	sed -i '1,1d' /tmp/volumes
-              		break
-          	done
-	    done
-	rm -f /tmp/server* /tmp/vol* /tmp/mySavedCookies
-    EOH
-end
+#bash "volume_attachment" do
+#    code <<-EOH
+#	for (( num=#{device_val}; num<#{device_limit}; num++ ))
+#	    do
+#       		for url in `cat /tmp/volumes`
+#          	do
+#              		export AVALUE_LDISK=$num
+#              		DISKCHR=`perl -e 'printf "%c\n", $ENV{'AVALUE_LDISK'};'`
+#              		DEVICE=/dev/sd$DISKCHR
+#              		/usr/bin/curl -X POST  -s -H "X-API-VERSION: 1.0" -b /tmp/mySavedCookies -d "server[ec2_ebs_volume_href]=$url" -d "server[device]=$DEVICE" `cat /tmp/server_url`
+#             	 	sed -i '1,1d' /tmp/volumes
+#              		break
+#          	done
+#	    done
+#	rm -f /tmp/server* /tmp/vol* /tmp/mySavedCookies
+#    EOH
+#end
 end
