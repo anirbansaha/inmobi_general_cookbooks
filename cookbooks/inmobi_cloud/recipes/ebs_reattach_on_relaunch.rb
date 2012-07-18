@@ -35,7 +35,6 @@ bash "rightscale_info" do
       server_id=`cat /tmp/server_id`
       server_url=$server_id"/attach_volume"
       echo $server_url > /tmp/server_url
-      /usr/bin/curl -X GET -s -H "X-API-VERSION: 1.0" -b /tmp/mySavedCookies -d "cloud_id=#{cloud_def[aws_region]}" #{inmobi_rs_volume_url} | grep -A9 available | grep -A3 #{hostname_fqdn} | grep href | sed 's/href>/#/g' | cut -d'<' -f2 | sed 's/#//g' | wc -l > /tmp/vol_verify
     EOH
 end
 
@@ -57,6 +56,9 @@ bash "get_volume_list" do
     EOH
 end
 
+vol_list = `cat /tmp/volumes | wc -l`.chomp
+vol_number = vol_list.to_i
+log "#{vol_number}"
 first_device = ""
 last_device = `ls -l /dev | grep disk | grep sd | awk '{ print $NF }' | sort | grep -A20 sdk | tail -n 1`.chomp
 if last_device == ""
