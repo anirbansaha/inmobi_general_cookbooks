@@ -35,10 +35,11 @@ bash "rightscale_info" do
       server_id=`cat /tmp/server_id`
       server_url=$server_id"/attach_volume"
       echo $server_url > /tmp/server_url
+      /usr/bin/curl -X GET -s -H "X-API-VERSION: 1.0" -b /tmp/mySavedCookies -d "cloud_id=#{cloud_def[aws_region]}" #{inmobi_rs_volume_url} | grep -A9 available | grep -A3 #{hostname_fqdn} | grep href | sed 's/href>/#/g' | cut -d'<' -f2 | sed 's/#//g' | wc -l > /tmp/vol_verify
     EOH
 end
 
-vol_verify_out = `/usr/bin/curl -X GET -s -H "X-API-VERSION: 1.0" -b /tmp/mySavedCookies -d "cloud_id=#{cloud_def[aws_region]}" #{inmobi_rs_volume_url} | grep -A9 available | grep -A3 #{hostname_fqdn} | grep href | sed 's/href>/#/g' | cut -d'<' -f2 | sed 's/#//g' | wc -l`.chomp
+vol_verify_out = `cat /tmp/vol_verify`.chomp
 vol_verify = vol_verify_out.to_s
 
 if vol_verify == "0"
