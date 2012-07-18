@@ -38,27 +38,12 @@ bash "rightscale_info" do
     EOH
 end
 
-vol_verify_out = `cat /tmp/vol_verify`.chomp
-vol_verify = vol_verify_out.to_s
-
-if vol_verify == "0"
-     bash "remove_files" do
-    	code <<-EOH
-	rm -f /tmp/server* /tmp/mySavedCookies
-    	EOH
-	end
-else
-vol_number = vol_verify.to_i
-
 bash "get_volume_list" do
     code <<-EOH
 	/usr/bin/curl -X GET -s -H "X-API-VERSION: 1.0" -b /tmp/mySavedCookies -d "cloud_id=#{cloud_def[aws_region]}" #{inmobi_rs_volume_url} | grep -A9 available | grep -A3 #{hostname_fqdn} | grep href | sed 's/href>/#/g' | cut -d'<' -f2 | sed 's/#//g' > /tmp/volumes
     EOH
 end
 
-vol_list = `cat /tmp/volumes | wc -l`.chomp
-vol_number = vol_list.to_i
-log "#{vol_number}"
 first_device = ""
 last_device = `ls -l /dev | grep disk | grep sd | awk '{ print $NF }' | sort | grep -A20 sdk | tail -n 1`.chomp
 if last_device == ""
@@ -70,7 +55,6 @@ else
     first_device = "sd" + "#{new_device_chr}"
 end
 device_val = first_device[-1]
-device_limit = device_val + vol_number
 
 bash "volume_attachment" do
     code <<-EOH
@@ -90,5 +74,4 @@ bash "volume_attachment" do
 	    done
 	rm -f /tmp/server* /tmp/vol* /tmp/mySavedCookies
     EOH
-end
 end
