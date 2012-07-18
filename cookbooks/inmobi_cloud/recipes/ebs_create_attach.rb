@@ -24,47 +24,37 @@ inmobi_rs_volume_url = "https://my.rightscale.com/api/acct/#{inmobi_acct_id}/ec2
 inmobi_rs_servers_url = "https://my.rightscale.com/api/acct/#{inmobi_acct_id}/servers"
 
 #Detect zone and region
-aws_zone = "#{node.inmobi_cloud.availability_zone}".split('-')
-aws_region = aws_zone[0..1].join('-')
+size = node[:inmobi_cloud][:size_of_volume].to_i
+vol_qty = node[:inmobi_cloud][:number_of_volumes].to_i
+aws_zone = "#{node.inmobi_cloud.availability_zone}"
+aws_zone_array = aws_zone.split('-')
+aws_region = aws_zone_array[0..1].join('-')
 hostname_fqdn = "#{node.inmobi_cloud.rs_hostname}".downcase
 
-bash "rightscale_info" do
+
+bash "volume_creation" do
     code <<-EOH
       /usr/bin/curl -c /tmp/mySavedCookies -u "#{node[:inmobi_cloud][:rscale_username]}":"#{node[:inmobi_cloud][:rscale_password]}" #{inmobi_rs_url}
       /usr/bin/curl -X GET -s -H "X-API-VERSION: 1.0" -b /tmp/mySavedCookies -d "cloud_id=#{cloud_def[aws_region]}" #{inmobi_rs_servers_url} | grep -A2 #{hostname_fqdn} | grep href | sed 's/href>/#/g' | cut -d'<' -f2 | sed 's/#//g' > /tmp/server_id
       server_id=`cat /tmp/server_id`
       server_url=$server_id"/attach_volume"
       echo $server_url > /tmp/server_url
-      /usr/bin/curl -X GET -s -H "X-API-VERSION: 1.0" -b /tmp/mySavedCookies -d "cloud_id=#{cloud_def[aws_region]}" #{inmobi_rs_volume_url} | grep "#{hostname_fqdn}"-vol | wc -l > /tmp/vol_verify
-      /usr/bin/curl -X GET -s -H "X-API-VERSION: 1.0" -b /tmp/mySavedCookies -d "cloud_id=#{cloud_def[aws_region]}" #{inmobi_rs_volume_url} | grep "#{hostname_fqdn}"-vol | tail -n 1 | cut -d'>' -f2 | cut -d'<' -f1 > /tmp/vol_lastvol
-    EOH
-end
+      vol_verify=`/usr/bin/curl -X GET -s -H "X-API-VERSION: 1.0" -b /tmp/mySavedCookies -d "cloud_id=#{cloud_def[aws_region]}" #{inmobi_rs_volume_url} | grep "#{hostname_fqdn}"-vol | wc -l`
+      vol_lastvol=`/usr/bin/curl -X GET -s -H "X-API-VERSION: 1.0" -b /tmp/mySavedCookies -d "cloud_id=#{cloud_def[aws_region]}" #{inmobi_rs_volume_url} | grep "#{hostname_fqdn}"-vol | tail -n 1 | cut -d'>' -f2 | cut -d'<' -f1`
+      vol_lastvol_chr=${vol_lastvol#${vol_lastvol%?}}
+      if [ $vol_verify = "0" ]
+      then
+      	disk_val=1
+      	limit=#{vol_qty}
+      else
+      	disk_val=`expr $vol_lastvol_chr + 1`
+      	limit=`expr $vol_lastvol_chr + #{vol_qty}`
+      fi
 
-last_chr = 0
-disk_val = 0
-limit = 0
-vol_verify_out = `cat /tmp/vol_verify`.chomp
-vol_verify = vol_verify_out.to_s
-if vol_verify != "0"
-      present_vol = `cat /tmp/vol_lastvol`.chomp
-      last_chr_str = present_vol[-1,1]
-      last_chr = last_chr_str.to_i
-end
-
-if vol_verify == "0"
-      disk_val = 1
-      limit = node[:inmobi_cloud][:number_of_volumes].to_i
-else
-      disk_val = last_chr + 1
-      limit = last_chr + node[:inmobi_cloud][:number_of_volumes].to_i
-end
-
-bash "volume_creation" do
-    code <<-EOH
-	for (( num=#{disk_val}; num<=#{limit}; num++ ))
-	do
-	      /usr/bin/curl -X POST -s -H "X-API-VERSION: 1.0" -b /tmp/mySavedCookies -d "cloud_id=#{cloud_def[aws_region]}" -d "ec2_ebs_volume[nickname]=#{hostname_fqdn}-vol$num" -d "ec2_ebs_volume[description]=#{hostname_fqdn}-Volume$num" -d "ec2_ebs_volume[ec2_availability_zone]=#{node[:inmobi_cloud][:availability_zone]}" -d "ec2_ebs_volume[aws_size]=#{node[:inmobi_cloud][:size_of_volume]}" #{inmobi_rs_volume_url}
-	done
+      for (( num=$disk_val; num<=$limit; num++ ))
+      do
+        curl -X POST -s -H "X-API-VERSION: 1.0" -b /tmp/mySavedCookies -d "cloud_id=#{cloud_def[aws_region]}" -d "ec2_ebs_volume[nickname]=#{hostname_fqdn}-vol$num" -d "ec2_ebs_volume[description]=#{hostname_fqdn}-Volume$num" -d "ec2_ebs_volume[ec2_availability_zone]=#{aws_zone}" -d "ec2_ebs_volume[aws_size]=#{size}" #{inmobi_rs_volume_url}
+      done
     EOH
 end
 
