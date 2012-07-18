@@ -41,7 +41,7 @@ bash "volume_creation" do
       echo $server_url > /tmp/server_url
       vol_verify=`/usr/bin/curl -X GET -s -H "X-API-VERSION: 1.0" -b /tmp/mySavedCookies -d "cloud_id=#{cloud_def[aws_region]}" #{inmobi_rs_volume_url} | grep #{hostname_fqdn}-vol | wc -l`
       vol_lastvol=`/usr/bin/curl -X GET -s -H "X-API-VERSION: 1.0" -b /tmp/mySavedCookies -d "cloud_id=#{cloud_def[aws_region]}" #{inmobi_rs_volume_url} | grep #{hostname_fqdn}-vol | tail -n 1 | cut -d'>' -f2 | cut -d'<' -f1`
-      vol_lastvol_chr=${vol_lastvol#${vol_lastvol%?}}
+      vol_lastvol_chr=${vol_lastvol\#${vol_lastvol%?}}
       if [ $vol_verify = "0" ]
       then
       	disk_val=1
