@@ -42,6 +42,11 @@ vol_verify_out = `/usr/bin/curl -X GET -s -H "X-API-VERSION: 1.0" -b /tmp/mySave
 vol_verify = vol_verify_out.to_s
 
 if vol_verify == "0"
+     bash "remove_files" do
+    	code <<-EOH
+	rm -f /tmp/server* /tmp/mySavedCookies
+    	EOH
+	end
      exit(0)
 end
 vol_number = vol_verify.to_i
