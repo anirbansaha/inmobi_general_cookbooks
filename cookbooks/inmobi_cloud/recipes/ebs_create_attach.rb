@@ -16,31 +16,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-#template "/tmp/vol_lastvol" do
-#    source "blankfile.erb"
-#    owner "root"
-#    group "root"
-#    mode "0644"
-#end
-#template "/tmp/vol_verify" do
-#    source "blankfile.erb"
-#    owner "root"
-#    group "root"
-#    mode "0644"
-#end
-#template "/tmp/server_url" do
-#    source "blankfile.erb"
-#    owner "root"
-#    group "root"
-#    mode "0644"
-#end
-#template "/tmp/disk" do
-#    source "blankfile.erb"
-#    owner "root"
-#    group "root"
-#    mode "0644"
-#end
-
 #Define cloud IDs and API URLs
 inmobi_acct_id = "55593"
 cloud_def = {"us-east" => 1, "eu-west" => 2, "us-west" => 3, "ap-southeast" => 4}
@@ -62,32 +37,18 @@ bash "rightscale_info" do
       echo $server_url > /tmp/server_url
     EOH
 end
+
 last_chr = 0
 disk_val = 0
 limit = 0
 vol_verify_out = `/usr/bin/curl -X GET -s -H "X-API-VERSION: 1.0" -b /tmp/mySavedCookies -d "cloud_id=#{cloud_def[aws_region]}" #{inmobi_rs_volume_url} | grep "#{hostname_fqdn}"-vol | cut -d'>' -f2 | cut -d'<' -f1 | wc -l`.chomp
 vol_verify = vol_verify_out.to_s
 log "#{vol_verify}"
-#if File.exist?("/tmp/vol_verify")
-#	f_vol = File.open("/tmp/vol_verify")
-#	vol_verify_out_raw = f_vol.read
-#	vol_verify_out = vol_verify_out_raw.chomp
-#	f_vol.close
-#	vol_verify = vol_verify_out.to_s
-#end
-
 if vol_verify != "0"
-#   if File.exist?("/tmp/vol_lastvol")
-#      f_present_vol = File.open("/tmp/vol_lastvol")
-#      present_vol_raw = f_present_vol.read
-#      present_vol = present_vol_raw.chomp
-#      f_present_vol.close
       present_vol = `/usr/bin/curl -X GET -s -H "X-API-VERSION: 1.0" -b /tmp/mySavedCookies -d "cloud_id=#{cloud_def[aws_region]}" #{inmobi_rs_volume_url} | grep "#{hostname_fqdn}"-vol | tail -n 1 | cut -d'>' -f2 | cut -d'<' -f1`.chomp
       last_chr_str = present_vol[-1,1]
       last_chr = last_chr_str.to_i
-#   end
 end
-log "#{last_chr}"
 
 if vol_verify == "0"
       disk_val = 1
@@ -96,8 +57,6 @@ else
       disk_val = last_chr + 1
       limit = last_chr + node[:inmobi_cloud][:number_of_volumes].to_i
 end
-
-log "#{disk_val} #{limit}"
 
 bash "volume_creation" do
     code <<-EOH
@@ -109,16 +68,6 @@ bash "volume_creation" do
 end
 
 sleep(200)
-#if File.exist?("/tmp/server_url")
-#	f_server = File.open("/tmp/server_url")
-#	this_server_url_raw = f_server.read
-#	this_server_url = this_server_url_raw.chomp
-#	f_server.close
-#end
-#this_server_volume_url = "#{inmobi_rs_servers_url}" + "/#{server_id}" + "/attach_volume"
-#log "#{server_id}"
-#log "#{this_server_volume_url}"
-
 bash "get_volume_list" do
     code <<-EOH
 	/usr/bin/curl -X GET -s -H "X-API-VERSION: 1.0" -b /tmp/mySavedCookies -d "cloud_id=#{cloud_def[aws_region]}" #{inmobi_rs_volume_url} | grep -A9 available | grep -A3 #{hostname_fqdn} | grep href | sed 's/href>/#/g' | cut -d'<' -f2 | sed 's/#//g' > /tmp/volumes
@@ -127,12 +76,6 @@ end
 
 first_device = ""
 last_device = `ls -l /dev | grep disk | grep sd | awk '{ print $NF }' | sort | grep -A20 sdk | tail -n 1`.chomp
-#if File.exist?("/tmp/disk")
-#	f_device = File.open("/tmp/disk")
-#	last_device_raw = f_device.read
-#	last_device = last_device_raw.chomp
-#	f_device.close
-#end
 if last_device == ""
     first_device = "sdk"
 else
