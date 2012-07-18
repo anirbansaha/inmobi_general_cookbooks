@@ -38,7 +38,7 @@ bash "rightscale_info" do
     EOH
 end
 
-vol_verify_out = `/usr/bin/curl -X GET -s -H "X-API-VERSION: 1.0" -b /tmp/mySavedCookies -d "cloud_id=#{cloud_def[aws_region]}" #{inmobi_rs_volume_url} | grep \`hostname\`-vol | cut -d'>' -f2 | cut -d'<' -f1 | wc -l`.chomp
+vol_verify_out = `/usr/bin/curl -X GET -s -H "X-API-VERSION: 1.0" -b /tmp/mySavedCookies -d "cloud_id=#{cloud_def[aws_region]}" #{inmobi_rs_volume_url} | grep -A9 available | grep -A3 #{hostname_fqdn} | grep href | sed 's/href>/#/g' | cut -d'<' -f2 | sed 's/#//g' | wc -l`.chomp
 vol_verify = vol_verify_out.to_s
 
 if vol_verify == "0"
