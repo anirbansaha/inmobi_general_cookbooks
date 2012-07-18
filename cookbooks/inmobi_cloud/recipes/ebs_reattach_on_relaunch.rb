@@ -47,8 +47,7 @@ if vol_verify == "0"
 	rm -f /tmp/server* /tmp/mySavedCookies
     	EOH
 	end
-     exit(0)
-end
+else
 vol_number = vol_verify.to_i
 
 bash "get_volume_list" do
@@ -86,4 +85,5 @@ bash "volume_attachment" do
 	    done
 	rm -f /tmp/server* /tmp/vol* /tmp/mySavedCookies
     EOH
+end
 end
