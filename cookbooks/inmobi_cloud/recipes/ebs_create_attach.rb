@@ -56,6 +56,7 @@ hostname_fqdn = "#{node.inmobi_cloud.rs_hostname}".downcase
 bash "rightscale_info" do
     code <<-EOH
       /usr/bin/curl -c /tmp/mySavedCookies -u "#{node[:inmobi_cloud][:rscale_username]}":"#{node[:inmobi_cloud][:rscale_password]}" #{inmobi_rs_url}
+      /usr/bin/curl -X GET -s -H "X-API-VERSION: 1.0" -b /tmp/mySavedCookies -d "cloud_id=#{cloud_def[aws_region]}" #{inmobi_rs_servers_url} | grep -A2 #{hostname_fqdn} | grep href | sed 's/href>/#/g' | cut -d'<' -f2 | sed 's/#//g' | cut -d'/' -f8 > /tmp/server_id
     EOH
 end
 last_chr = 0
@@ -105,7 +106,7 @@ bash "volume_creation" do
 end
 
 sleep(200)
-server_id = `/usr/bin/curl -X GET -s -H "X-API-VERSION: 1.0" -b /tmp/mySavedCookies -d "cloud_id=#{cloud_def[aws_region]}" #{inmobi_rs_servers_url} | grep -A2 #{hostname_fqdn} | grep href | sed 's/href>/#/g' | cut -d'<' -f2 | sed 's/#//g' | cut -d'/' -f8`.chomp
+server_id = `cat /tmp/server_id`.chomp
 #if File.exist?("/tmp/server_url")
 #	f_server = File.open("/tmp/server_url")
 #	this_server_url_raw = f_server.read
