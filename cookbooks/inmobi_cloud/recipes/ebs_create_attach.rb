@@ -58,7 +58,7 @@ bash "rightscale_info" do
       /usr/bin/curl -c /tmp/mySavedCookies -u "#{node[:inmobi_cloud][:rscale_username]}":"#{node[:inmobi_cloud][:rscale_password]}" #{inmobi_rs_url}
       /usr/bin/curl -X GET -s -H "X-API-VERSION: 1.0" -b /tmp/mySavedCookies -d "cloud_id=#{cloud_def[aws_region]}" #{inmobi_rs_servers_url} | grep -A2 #{hostname_fqdn} | grep href | sed 's/href>/#/g' | cut -d'<' -f2 | sed 's/#//g' > /tmp/server_id
       server_id=`cat /tmp/server_id`
-      server_url=#{inmobi_rs_servers_url}"/"$server_id"/attach_volume"
+      server_url=$server_id"/attach_volume"
       echo $server_url > /tmp/server_url
     EOH
 end
