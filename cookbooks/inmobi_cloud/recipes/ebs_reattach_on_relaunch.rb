@@ -73,6 +73,9 @@ bash "volume_attachment" do
           	done
 	    done
 	rm -f /tmp/server* /tmp/vol* /tmp/mySavedCookies
-	sleep 300
+	if [ $vol_number -ne 0 ]
+	then
+		sleep 300
+	fi
     EOH
 end
