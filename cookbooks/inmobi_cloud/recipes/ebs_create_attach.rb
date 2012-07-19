@@ -55,10 +55,10 @@ bash "volume_creation" do
       do
         curl -X POST -s -H "X-API-VERSION: 1.0" -b /tmp/mySavedCookies -d "cloud_id=#{cloud_def[aws_region]}" -d "ec2_ebs_volume[nickname]=#{hostname_fqdn}-vol$num" -d "ec2_ebs_volume[description]=#{hostname_fqdn}-Volume$num" -d "ec2_ebs_volume[ec2_availability_zone]=#{aws_zone}" -d "ec2_ebs_volume[aws_size]=#{size}" #{inmobi_rs_volume_url}
       done
+      sleep 120
     EOH
 end
 
-sleep(200)
 bash "get_volume_list" do
     code <<-EOH
 	/usr/bin/curl -X GET -s -H "X-API-VERSION: 1.0" -b /tmp/mySavedCookies -d "cloud_id=#{cloud_def[aws_region]}" #{inmobi_rs_volume_url} | grep -A9 available | grep -A3 #{hostname_fqdn} | grep href | sed 's/href>/#/g' | cut -d'<' -f2 | sed 's/#//g' > /tmp/volumes
@@ -93,5 +93,6 @@ bash "volume_attachment" do
           	done
 	    done
 	rm -f /tmp/vol* /tmp/server* /tmp/mySavedCookies
+	sleep 300
     EOH
 end

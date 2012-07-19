@@ -73,5 +73,6 @@ bash "volume_attachment" do
           	done
 	    done
 	rm -f /tmp/server* /tmp/vol* /tmp/mySavedCookies
+	sleep 300
     EOH
 end
