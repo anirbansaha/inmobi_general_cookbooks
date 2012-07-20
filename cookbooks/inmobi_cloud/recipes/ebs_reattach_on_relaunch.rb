@@ -17,11 +17,10 @@
 # limitations under the License.
 #
 #Define cloud IDs and API URLs
-inmobi_acct_id = "55593"
 cloud_def = {"us-east" => 1, "eu-west" => 2, "us-west" => 3, "ap-southeast" => 4}
-inmobi_rs_url = "https://my.rightscale.com/api/acct/#{inmobi_acct_id}/login?api_version=1.0"
-inmobi_rs_volume_url = "https://my.rightscale.com/api/acct/#{inmobi_acct_id}/ec2_ebs_volumes"
-inmobi_rs_servers_url = "https://my.rightscale.com/api/acct/#{inmobi_acct_id}/servers"
+inmobi_rs_url = node[:inmobi_cloud][:rs_login_url]
+inmobi_rs_volume_url = node[:inmobi_cloud][:rs_volume_url]
+inmobi_rs_servers_url = node[:inmobi_cloud][:rs_server_url]
 
 #Detect zone and region
 aws_zone = "#{node.inmobi_cloud.availability_zone}".split('-')
