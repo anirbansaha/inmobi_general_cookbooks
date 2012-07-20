@@ -155,6 +155,7 @@
     "inmobi_cloud::dns_delete_record": "Removes DNS entry for UltraDNS",
     "inmobi_cloud::ebs_reattach_on_relaunch": "Reattaches the already existing EBS volumes when an instance is relaunched with same name",
     "inmobi_cloud::apt_repo_config": "Configures apt repo files",
+    "inmobi_cloud::delete_unused_ebs": "Deletes all unused EBS volumes in all regions, i.e. volumes in available state",
     "inmobi_cloud::ebs_create_attach": "Creates ebs volumes and attaches to the instance based on the inputs entered, i.e. number of volumes required and size of each volume",
     "inmobi_cloud::hostname_change_config": "Reconfigures instance on hostname change, has to be run after changing the nickname of the instance",
     "inmobi_cloud::dns_add_record": "Adds DNS entry in UltraDNS",
