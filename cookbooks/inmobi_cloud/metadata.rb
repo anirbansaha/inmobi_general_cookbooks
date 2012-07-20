@@ -14,6 +14,7 @@ recipe "inmobi_cloud::hostname_change_config", "Reconfigures instance on hostnam
 recipe "inmobi_cloud::ebs_create_attach", "Creates ebs volumes and attaches to the instance based on the inputs entered, i.e. number of volumes required and size of each volume"
 recipe "inmobi_cloud::ebs_reattach_on_relaunch", "Reattaches the already existing EBS volumes when an instance is relaunched with same name"
 recipe "inmobi_cloud::delete_unused_ebs", "Deletes all unused EBS volumes in all regions, i.e. volumes in available state"
+recipe "inmobi_cloud::raid_config", "Configures raid on the instance based on the inputs provided, i.e. number of volumes to use and level of raid"
 
 attribute "inmobi_cloud/rs_hostname",
  :display_name => "Nickname of the instance",
@@ -68,3 +69,15 @@ attribute "inmobi_cloud/size_of_volume",
  :description => "Size of EBS volumes required to be created and attached to the instance, has to be given a value of type TEXT, e.g. 50 if 50G volumes are to be attached",
  :required => "required",
  :recipes => [ "inmobi_cloud::ebs_create_attach" ]
+
+attribute "inmobi_cloud/number_of_volumes_for_raid",
+ :display_name => "Number of EBS volumes to be used for RAID configuration",
+ :description => "Number of EBS volumes required to be used for the RAID configuration",
+ :required => "required",
+ :recipes => [ "inmobi_cloud::raid_config" ]
+
+attribute "inmobi_cloud/level_of_raid",
+ :display_name => "Level of RAID to be used for RAID configuration",
+ :description => "Level of RAID required to be used for the RAID configuration, i.e. 0 for RAID 0 or 10 for RAID 1+0",
+ :required => "required",
+ :recipes => [ "inmobi_cloud::raid_config" ]

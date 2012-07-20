@@ -19,6 +19,32 @@
       "description": "The username required to make UltraDNS API call, has to be set to the CREDENTIAL variable UDNS_USER from RS dashboard inputs",
       "display_name": "UltraDNS username"
     },
+    "inmobi_cloud/level_of_raid": {
+      "required": "required",
+      "calculated": false,
+      "choice": [
+
+      ],
+      "type": "string",
+      "recipes": [
+        "inmobi_cloud::raid_config"
+      ],
+      "description": "Level of RAID required to be used for the RAID configuration, i.e. 0 for RAID 0 or 10 for RAID 1+0",
+      "display_name": "Level of RAID to be used for RAID configuration"
+    },
+    "inmobi_cloud/number_of_volumes_for_raid": {
+      "required": "required",
+      "calculated": false,
+      "choice": [
+
+      ],
+      "type": "string",
+      "recipes": [
+        "inmobi_cloud::raid_config"
+      ],
+      "description": "Number of EBS volumes required to be used for the RAID configuration",
+      "display_name": "Number of EBS volumes to be used for RAID configuration"
+    },
     "inmobi_cloud/rscale_password": {
       "required": "required",
       "calculated": false,
@@ -159,7 +185,8 @@
     "inmobi_cloud::ebs_create_attach": "Creates ebs volumes and attaches to the instance based on the inputs entered, i.e. number of volumes required and size of each volume",
     "inmobi_cloud::hostname_change_config": "Reconfigures instance on hostname change, has to be run after changing the nickname of the instance",
     "inmobi_cloud::dns_add_record": "Adds DNS entry in UltraDNS",
-    "inmobi_cloud::puppet_config": "Configures puppet and related services"
+    "inmobi_cloud::puppet_config": "Configures puppet and related services",
+    "inmobi_cloud::raid_config": "Configures raid on the instance based on the inputs provided, i.e. number of volumes to use and level of raid"
   },
   "groupings": {
   },
